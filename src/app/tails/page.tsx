@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getProfile } from "@/lib/profile";
+import { TerminalWindow } from "@/components/TerminalWindow";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +9,7 @@ function ProgressBar({ value }: { value: number }) {
   const filled = Math.round(percentage / 10);
   const empty = 10 - filled;
   return (
-    <span className="font-mono">
+    <span className="font-mono text-[var(--tails)]">
       {"█".repeat(filled)}{"░".repeat(empty)} {percentage}%
     </span>
   );
@@ -18,58 +19,48 @@ export default function TailsPage() {
   const profile = getProfile();
   const tails = profile?.tails || { status: "fluffy", location: "somewhere warm", tailLength: 50, energy: 50, napsToday: 0, bamboo: 0 };
 
-  const asciiArt = [
-    "$ tails -n 10",
-    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-    "  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-    "     ▄▄▄   Red Panda   ▄▄▄",
-    "   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-    "  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-    "  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀",
-    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-    "  species:     red_panda",
-    "  colors:      teal, cyan, red",
-    "  status:      " + tails.status + " ✨",
-    "  location:    " + tails.location,
-    "  ─────────────────────────────────",
-    "  tail_length:   ",
-    "  energy:        ",
-    "  naps_today:     " + tails.napsToday,
-    "  bamboo:        " + tails.bamboo + " sticks eaten",
-    "  ██▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄",
-  ].join("\n");
-
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-3xl font-bold mb-8 gradient-text">/tails</h1>
       
-      <div className="code-block mb-8">
-        <div className="flex items-center gap-2 mb-4 text-[var(--text-muted)] text-sm">
-          <span className="w-2 h-2 rounded-full bg-[var(--primary)]"></span>
-          <span>vokiry@terminal</span>
-        </div>
-        <pre className="text-[var(--text-primary)] font-mono text-xs sm:text-sm whitespace-pre">
-{asciiArt.split("\n").slice(0, 13).join("\n")}
-<ProgressBar value={tails.tailLength} />
-{"\n" + asciiArt.split("\n").slice(14, 15).join("\n")}
-<ProgressBar value={tails.energy} />
-{"\n" + asciiArt.split("\n").slice(15).join("\n")}
-</pre>
-      </div>
+      <TerminalWindow title="~ tails -n 10" className="mb-8 animate-scale-in">
+        <pre className="text-[var(--text-primary)] font-mono text-xs sm:text-sm">
+<span className="text-[var(--tails)]">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+     ▄▄▄   Red Panda   ▄▄▄
+   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  species:     red_panda
+  colors:      teal, cyan, red
+  status:      </span><span className="text-[var(--tails-light)]">{tails.status}</span><span className="text-[var(--tails)]"> ✨
+  location:    </span>{tails.location}
+<span className="text-[var(--tails)]">  ─────────────────────────────────
+  tail_length:   </span><ProgressBar value={tails.tailLength} />
+<span className="text-[var(--tails)]">
+  energy:        </span><ProgressBar value={tails.energy} />
+<span className="text-[var(--tails)]">
+  naps_today:     </span>{tails.napsToday}
+<span className="text-[var(--tails)]">
+  bamboo:        </span>{tails.bamboo} sticks eaten
+<span className="text-[var(--tails)]">
+  ██▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄</span></pre>
+      </TerminalWindow>
 
-      <div className="glass-card p-6">
+      <div className="glass-card p-6 animate-slide-up">
         <p className="text-[var(--text-secondary)] leading-relaxed">
           Just a little something for the curious. Think of this as the tail end of the internet - 
           a place where the interesting bits are.
         </p>
         <p className="text-[var(--text-muted)] text-sm mt-4">
-          (It also plays on the Unix <code>tail</code> command - get the last lines of a file. 
+          (It also plays on the Unix <code className="text-[var(--tails)]">tail</code> command - get the last lines of a file. 
           But instead, you get the last... tail.)
         </p>
       </div>
 
-      <div className="mt-8">
-        <Link href="/" className="text-[var(--text-muted)] hover:text-[var(--primary)] transition-colors">
+      <div className="mt-8 animate-fade-in">
+        <Link href="/" className="text-[var(--text-muted)] hover:text-[var(--section-accent)] transition-colors">
           ← Back to home
         </Link>
       </div>

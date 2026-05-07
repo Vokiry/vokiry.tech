@@ -156,7 +156,7 @@ export default function AdminDashboard() {
     try {
       const res = await fetch(`/api/admin/posts?slug=${slug}`, { method: "DELETE" });
       if (res.ok) fetchPosts();
-    } catch { console.error(e); }
+    } catch (err) { console.error(err); }
   };
 
   const handleCreateProject = async (e: React.FormEvent) => {
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
     try {
       const res = await fetch(`/api/admin/projects?slug=${slug}`, { method: "DELETE" });
       if (res.ok) fetchProjects();
-    } catch { console.error(e); }
+    } catch (err) { console.error(err); }
   };
 
   const handleEditProject = (project: Project) => {
@@ -237,7 +237,7 @@ export default function AdminDashboard() {
     try {
       const res = await fetch(`/api/admin/skills?category=${encodeURIComponent(category)}`, { method: "DELETE" });
       if (res.ok) fetchSkills();
-    } catch { console.error(e); }
+    } catch (err) { console.error(err); }
   };
 
   const handleEditSkill = (skill: Skill) => {
