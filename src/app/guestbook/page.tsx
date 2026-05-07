@@ -55,7 +55,7 @@ export default function GuestbookPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-bold mb-2 gradient-text">Guestbook</h1>
+      <h1 className="text-3xl font-bold mb-2 gradient-text">/guestbook</h1>
       <p className="text-[var(--text-secondary)] mb-8">
         Leave a message for future visitors.
       </p>
