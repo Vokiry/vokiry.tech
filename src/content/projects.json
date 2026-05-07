@@ -1,0 +1,60 @@
+[
+  {
+    "slug": "project-alpha",
+    "title": "Project Alpha",
+    "description": "A powerful tool for developers to streamline their workflow. Built with Next.js and TypeScript.",
+    "tech": [
+      "Next.js",
+      "TypeScript",
+      "PostgreSQL",
+      "Prisma"
+    ],
+    "live": "#",
+    "github": "#",
+    "featured": true,
+    "order": 1
+  },
+  {
+    "slug": "project-beta",
+    "title": "Project Beta",
+    "description": "Real-time collaboration platform for remote teams with WebSocket support.",
+    "tech": [
+      "React",
+      "Node.js",
+      "WebSockets",
+      "Redis"
+    ],
+    "live": "#",
+    "github": "#",
+    "featured": true,
+    "order": 2
+  },
+  {
+    "slug": "project-gamma",
+    "title": "Project Gamma",
+    "description": "API documentation generator with automatic schema extraction.",
+    "tech": [
+      "TypeScript",
+      "Express",
+      "OpenAPI"
+    ],
+    "live": "#",
+    "github": "#",
+    "featured": false,
+    "order": 3
+  },
+  {
+    "title": "test project",
+    "description": "test desc",
+    "tech": [
+      "babmoo",
+      "2 shawarmas",
+      "89 RedBulls"
+    ],
+    "live": "",
+    "github": "https://github.com/nah_lul",
+    "featured": false,
+    "order": 999,
+    "slug": "test-project"
+  }
+]

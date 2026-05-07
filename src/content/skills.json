@@ -1,0 +1,17 @@
+[
+  {
+    "category": "Frontend",
+    "proficiency": "Expert",
+    "items": ["React", "Next.js", "TypeScript", "Tailwind CSS"]
+  },
+  {
+    "category": "Backend",
+    "proficiency": "Advanced",
+    "items": ["Node.js", "Express", "PostgreSQL", "Prisma"]
+  },
+  {
+    "category": "Tools",
+    "proficiency": "Advanced",
+    "items": ["Git", "Docker", "AWS", "Linux"]
+  }
+]

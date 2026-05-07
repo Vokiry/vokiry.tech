@@ -1,0 +1,47 @@
+{
+  "about": {
+    "whoAmI": "I'm a full-stack developer passionate about building tools that make developers' lives easier. I enjoy working on projects that solve real problems and exploring new technologies.",
+    "whatIDo": "I build web applications, developer tools, and explore the latest in the JavaScript ecosystem. When I'm not coding, I write about what I'm learning and experiment with new frameworks.",
+    "fursona": {
+      "species": "Red Panda",
+      "colors": [
+        "teal",
+        "cyan",
+        "red"
+      ]
+    }
+  },
+  "now": [
+    {
+      "item": "Building vokiry.tech",
+      "description": "Working on this portfolio site and adding new features"
+    },
+    {
+      "item": "Learning Next.js 16",
+      "description": "Exploring the latest Next.js features and improvements"
+    }
+  ],
+  "uses": {
+    "hardware": [
+      "MacBook Pro M3",
+      "Keychron K2 Mechanical Keyboard"
+    ],
+    "software": [
+      "kitty"
+    ]
+  },
+  "tails": {
+    "status": "whicked",
+    "location": "elsewhere",
+    "tailLength": 92,
+    "energy": 43,
+    "napsToday": 52,
+    "bamboo": 1934
+  },
+  "social": {
+    "github": "https://github.com/yourusername",
+    "twitter": "https://twitter.com/yourusername",
+    "linkedin": "https://linkedin.com/in/yourusername",
+    "email": "hello@vokiry.tech"
+  }
+}
