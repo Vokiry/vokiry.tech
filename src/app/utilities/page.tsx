@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { TerminalWindow } from "@/components/TerminalWindow";
 
 const tools = [
   { id: "json", name: "JSON Formatter", description: "Format and validate JSON" },
@@ -106,9 +107,20 @@ export default function UtilitiesPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-bold mb-8 gradient-text">Utilities</h1>
+      <h1 className="text-3xl font-bold mb-8 gradient-text">/utilities</h1>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+      {/* Terminal Header */}
+      <div className="mb-8 animate-scale-in">
+        <TerminalWindow title="~ devtools">
+          <pre className="text-[var(--text-primary)] font-mono text-sm">
+<span className="text-[var(--section-accent)]">$</span> ls tools/
+{tools.map(t => `${t.id}  `).join('')}
+<span className="text-[var(--section-accent)]">$</span> _</pre>
+        </TerminalWindow>
+      </div>
+
+      {/* Tools Grid */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 stagger-2">
         {tools.map((tool) => (
           <button
             key={tool.id}
@@ -118,9 +130,9 @@ export default function UtilitiesPage() {
               setOutput("");
               setColorOutput(null);
             }}
-            className={`glass-card p-4 text-left transition-all ${
+            className={`terminal-card p-4 text-left transition-all hover-lift ${
               activeTool === tool.id
-                ? "border-[var(--primary)] glow-border"
+                ? "border-[var(--section-accent)] glow-border"
                 : "hover:border-[var(--border-hover)]"
             }`}
           >

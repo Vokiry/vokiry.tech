@@ -1,56 +1,44 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/posts";
+import { TerminalWindow } from "@/components/TerminalWindow";
 
 export const dynamic = "force-dynamic";
 
 export default function BlogPage() {
   const posts = getAllPosts();
 
-  const samplePosts = [
-    {
-      title: "Getting Started with Next.js 14",
-      date: "2024-01-15",
-      excerpt: "Exploring the new features in Next.js 14 and how to get started with App Router.",
-      tags: ["Next.js", "React", "Tutorial"],
-      slug: "getting-started-nextjs-14",
-    },
-    {
-      title: "Building Developer Tools",
-      date: "2024-01-10",
-      excerpt: "Thoughts on what makes a good developer tool and lessons learned building utilities.",
-      tags: ["DevTools", "UX"],
-      slug: "building-developer-tools",
-    },
-    {
-      title: "Welcome to My Blog",
-      date: "2024-01-01",
-      excerpt: "Starting a new journey in writing about development and sharing knowledge.",
-      tags: ["Introduction"],
-      slug: "welcome-to-my-blog",
-    },
-  ];
-
-  const displayPosts = posts.length > 0 ? posts : samplePosts;
-
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-bold mb-8 gradient-text">Blog</h1>
+      <h1 className="text-3xl font-bold mb-8 gradient-text">/blog</h1>
+
+      {/* Terminal Header */}
+      <div className="mb-8 animate-scale-in">
+        <TerminalWindow title="~ blog">
+          <pre className="text-[var(--text-primary)] font-mono text-sm">
+<span className="text-[var(--section-accent)]">$</span> ls -la posts/
+total {posts.length}
+drwxr-xr-x  {posts.length}  {new Date().toLocaleDateString()}
+.</pre>
+        </TerminalWindow>
+      </div>
 
       {posts.length === 0 && (
-        <div className="mb-6 p-4 rounded bg-[var(--bg-secondary)] border border-[var(--border)]">
-          <p className="text-sm text-[var(--text-muted)]">
-            No posts yet.{" "}
-            <Link href="/admin" className="text-[var(--primary)] hover:underline">
-              Add posts via admin →
-            </Link>
-          </p>
+        <div className="mb-6 animate-fade-in">
+          <TerminalWindow variant="minimal">
+            <p className="text-[var(--text-muted)]">
+              No posts yet.{" "}
+              <Link href="/admin" className="text-[var(--section-accent)] hover:underline">
+                Add posts via admin →
+              </Link>
+            </p>
+          </TerminalWindow>
         </div>
       )}
 
-      <div className="space-y-6">
-        {displayPosts.map((post) => (
+      <div className="space-y-4 stagger-2">
+        {posts.map((post, index) => (
           <Link key={post.slug} href={`/blog/${post.slug}`}>
-            <article className="glass-card p-6 hover:border-[var(--primary)] cursor-pointer">
+            <article className="terminal-card p-5 hover-lift cursor-pointer animate-slide-up" style={{ animationDelay: `${(index + 1) * 0.05}s` }}>
               <div className="flex items-center gap-3 mb-3">
                 <time className="text-sm text-[var(--text-muted)]">{post.date}</time>
                 <span className="text-[var(--text-muted)]">·</span>
@@ -58,7 +46,7 @@ export default function BlogPage() {
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs px-2 py-0.5 rounded bg-[var(--primary)]/10 text-[var(--primary)]"
+                      className="text-xs px-2 py-0.5 rounded bg-[var(--bg-card)] text-[var(--section-accent)]"
                     >
                       {tag}
                     </span>

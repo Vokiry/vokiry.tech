@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ToolIcon } from "./icons/ToolIcon";
 import { TerminalIcon } from "./icons/TerminalIcon";
 import { MenuIcon } from "./icons/MenuIcon";
 import { XIcon } from "./icons/XIcon";
@@ -44,7 +43,7 @@ export function Navigation() {
                   href={link.href}
                   className={`px-3 py-2 rounded-md text-sm transition-all ${
                     isActive 
-                      ? "bg-[var(--bg-secondary)] text-[var(--section-accent)]" 
+                      ? "bg-[var(--section-glow)] text-[var(--section-accent)]" 
                       : "text-[var(--text-secondary)] hover:text-[var(--section-accent)] hover:bg-[var(--bg-secondary)]"
                   }`}
                 >
