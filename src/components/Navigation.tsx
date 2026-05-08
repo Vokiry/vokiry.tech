@@ -26,7 +26,7 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           <Link 
             href="/" 
-            className="flex items-center gap-2 text-lg font-semibold hover-lift transition-all"
+            className="flex items-center gap-2 text-lg font-semibold"
           >
             <span className="text-[var(--section-accent)] animate-blink">❯</span>
             <span className="gradient-text">vokiry</span>

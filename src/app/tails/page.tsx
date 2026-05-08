@@ -19,33 +19,38 @@ export default function TailsPage() {
   const profile = getProfile();
   const tails = profile?.tails || { status: "fluffy", location: "somewhere warm", tailLength: 50, energy: 50, napsToday: 0, bamboo: 0 };
 
+  const asciiArt = [
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+    "  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
+    "     ▄▄▄   Red Panda   ▄▄▄",
+    "   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
+    "  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
+    "  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀",
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+    "  species:     red_panda",
+    "  colors:      teal, cyan, red",
+    "  status:      " + tails.status + " ✨",
+    "  location:    " + tails.location,
+    "  ─────────────────────────────────",
+    "  tail_length:   ",
+    "  energy:        ",
+    "  naps_today:     " + tails.napsToday,
+    "  bamboo:        " + tails.bamboo + " sticks eaten",
+    "  ██▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄",
+  ];
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-3xl font-bold mb-8 gradient-text">/tails</h1>
       
       <TerminalWindow title="~ tails -n 10" className="mb-8 animate-scale-in">
-        <pre className="text-[var(--text-primary)] font-mono text-xs sm:text-sm">
-<span className="text-[var(--tails)]">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-     ▄▄▄   Red Panda   ▄▄▄
-   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  species:     red_panda
-  colors:      teal, cyan, red
-  status:      </span><span className="text-[var(--tails-light)]">{tails.status}</span><span className="text-[var(--tails)]"> ✨
-  location:    </span>{tails.location}
-<span className="text-[var(--tails)]">  ─────────────────────────────────
-  tail_length:   </span><ProgressBar value={tails.tailLength} />
-<span className="text-[var(--tails)]">
-  energy:        </span><ProgressBar value={tails.energy} />
-<span className="text-[var(--tails)]">
-  naps_today:     </span>{tails.napsToday}
-<span className="text-[var(--tails)]">
-  bamboo:        </span>{tails.bamboo} sticks eaten
-<span className="text-[var(--tails)]">
-  ██▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄</span></pre>
+        <pre className="text-xs sm:text-sm font-mono whitespace-pre">
+{asciiArt.slice(0, 12).join("\n")}
+<ProgressBar value={tails.tailLength} />
+{"\n" + asciiArt.slice(13, 14).join("\n")}
+<ProgressBar value={tails.energy} />
+{"\n" + asciiArt.slice(14).join("\n")}
+        </pre>
       </TerminalWindow>
 
       <div className="glass-card p-6 animate-slide-up">

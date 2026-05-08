@@ -560,6 +560,11 @@ button {
   box-shadow: 0 10px 30px var(--section-glow);
 }
 
+/* Remove ugly hover square */
+.hover-lift:hover::before {
+  display: none;
+}
+
 .hover-glow {
   transition: box-shadow 0.3s ease;
 }
