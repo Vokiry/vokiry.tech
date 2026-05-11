@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default function ContactPage() {
   const profile = getProfile();
-  const social = profile?.social || { github: "", twitter: "", linkedin: "", email: "" };
+  const social = profile?.social || { github: "", twitter: "", telegram: "", email: "" };
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -60,15 +60,15 @@ export default function ContactPage() {
             </a>
           )}
 
-          {social.linkedin && (
+          {social.telegram && (
             <a
-              href={social.linkedin}
+              href={social.telegram}
               target="_blank"
               rel="noopener noreferrer"
               className="block p-4 rounded-md bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] transition-all hover-lift"
             >
-              <span className="text-[var(--text-muted)] text-sm">LinkedIn</span>
-              <p className="text-[var(--section-accent)]">{social.linkedin.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//, "")}</p>
+              <span className="text-[var(--text-muted)] text-sm">Telegram</span>
+              <p className="text-[var(--section-accent)]">{social.telegram.replace(/^https?:\/\/(www\.)?t\.me\//, "")}</p>
             </a>
           )}
         </div>

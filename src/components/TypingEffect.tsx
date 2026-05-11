@@ -12,7 +12,9 @@ export function Typewriter({ text, speed = 50, className = "" }: TypewriterProps
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
+    if (!text) return;
     let index = 0;
+    setDisplayedText("");
     const interval = setInterval(() => {
       if (index <= text.length) {
         setDisplayedText(text.slice(0, index));

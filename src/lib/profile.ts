@@ -3,11 +3,6 @@ import path from "path";
 
 const profilePath = path.join(process.cwd(), "src/content/profile.json");
 
-export interface Fursona {
-  species: string;
-  colors: string[];
-}
-
 export interface NowItem {
   item: string;
   description: string;
@@ -30,14 +25,13 @@ export interface TailsStats {
 export interface Social {
   github: string;
   twitter: string;
-  linkedin: string;
+  telegram: string;
   email: string;
 }
 
 export interface About {
   whoAmI: string;
   whatIDo: string;
-  fursona: Fursona;
 }
 
 export interface Profile {
@@ -77,7 +71,6 @@ export function getAbout(): About {
   return profile?.about || {
     whoAmI: "",
     whatIDo: "",
-    fursona: { species: "", colors: [] }
   };
 }
 
@@ -108,7 +101,7 @@ export function getSocial(): Social {
   return profile?.social || {
     github: "",
     twitter: "",
-    linkedin: "",
+    telegram: "",
     email: ""
   };
 }

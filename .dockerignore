@@ -1,0 +1,10 @@
+.next
+node_modules
+.env
+.env.local
+*.log
+.DS_Store
+certbot/conf/live
+nginx/ssl
+static
+.git

@@ -2,17 +2,26 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import bcrypt from "bcryptjs";
 
-const PASSWORD = "Vokiry_SHkiper.758";
+const PASSWORD_HASH = process.env.NEXT_PUBLIC_ADMIN_PASSWORD_HASH || "";
 
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === PASSWORD) {
+    if (!PASSWORD_HASH) {
+      setError(true);
+      return;
+    }
+    setLoading(true);
+    const valid = await bcrypt.compare(password, PASSWORD_HASH);
+    setLoading(false);
+    if (valid) {
       document.cookie = "admin-auth=true; path=/; max-age=3600";
       router.push("/admin/dashboard");
     } else {
@@ -46,9 +55,10 @@ export default function AdminLogin() {
         
         <button
           type="submit"
-          className="w-full py-3 rounded-md bg-[var(--primary)] text-[var(--bg-primary)] font-medium hover:bg-[var(--primary-dark)] transition-colors"
+          disabled={loading}
+          className="w-full py-3 rounded-md bg-[var(--primary)] text-[var(--bg-primary)] font-medium hover:bg-[var(--primary-dark)] transition-colors disabled:opacity-50"
         >
-          Login
+          {loading ? "Verifying..." : "Login"}
         </button>
       </form>
 

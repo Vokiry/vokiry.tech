@@ -9,7 +9,7 @@ function ProgressBar({ value }: { value: number }) {
   const filled = Math.round(percentage / 10);
   const empty = 10 - filled;
   return (
-    <span className="font-mono text-[var(--tails)]">
+    <span className="text-[var(--tails)]">
       {"█".repeat(filled)}{"░".repeat(empty)} {percentage}%
     </span>
   );
@@ -19,38 +19,26 @@ export default function TailsPage() {
   const profile = getProfile();
   const tails = profile?.tails || { status: "fluffy", location: "somewhere warm", tailLength: 50, energy: 50, napsToday: 0, bamboo: 0 };
 
-  const asciiArt = [
-    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-    "  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-    "     ▄▄▄   Red Panda   ▄▄▄",
-    "   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-    "  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-    "  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀",
-    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-    "  species:     red_panda",
-    "  colors:      teal, cyan, red",
-    "  status:      " + tails.status + " ✨",
-    "  location:    " + tails.location,
-    "  ─────────────────────────────────",
-    "  tail_length:   ",
-    "  energy:        ",
-    "  naps_today:     " + tails.napsToday,
-    "  bamboo:        " + tails.bamboo + " sticks eaten",
-    "  ██▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄",
-  ];
-
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-3xl font-bold mb-8 gradient-text">/tails</h1>
       
-      <TerminalWindow title="~ tails -n 10" className="mb-8 animate-scale-in">
-        <pre className="text-xs sm:text-sm font-mono whitespace-pre">
-{asciiArt.slice(0, 12).join("\n")}
-<ProgressBar value={tails.tailLength} />
-{"\n" + asciiArt.slice(13, 14).join("\n")}
-<ProgressBar value={tails.energy} />
-{"\n" + asciiArt.slice(14).join("\n")}
-        </pre>
+      <TerminalWindow title="~ fastfetch" className="mb-8 animate-scale-in">
+        <div className="font-mono text-xs text-[var(--text-primary)] leading-relaxed">
+<span className="text-[var(--tails)]">       /\_/\</span><span className="text-[var(--text-muted)]">    TailsOS 1.0</span><br/>
+<span className="text-[var(--tails)]">      =(o.o)=</span><br/>
+<span className="text-[var(--tails)]">       )___)</span><span className="text-[var(--text-muted)]">    red_panda@tails</span><br/>
+<span className="text-[var(--section-accent)]">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span><br/>
+<span className="text-[var(--text-muted)]">  species:</span>      red_panda<br/>
+<span className="text-[var(--text-muted)]">  status:</span>       <span className="text-[var(--tails)]">{tails.status}</span> ✨<br/>
+<span className="text-[var(--text-muted)]">  location:</span>    {tails.location}<br/>
+<span className="text-[var(--section-accent)]">────────────────────────────────────</span><br/>
+<span className="text-[var(--text-muted)]">  tail_length:</span>    <ProgressBar value={tails.tailLength} /><br/>
+<span className="text-[var(--text-muted)]">  energy:</span>       <ProgressBar value={tails.energy} /><br/>
+<span className="text-[var(--text-muted)]">  naps_today:</span>    {tails.napsToday}<br/>
+<span className="text-[var(--text-muted)]">  bamboo:</span>       {tails.bamboo} sticks<br/>
+<span className="text-[var(--section-accent)]">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+        </div>
       </TerminalWindow>
 
       <div className="glass-card p-6 animate-slide-up">

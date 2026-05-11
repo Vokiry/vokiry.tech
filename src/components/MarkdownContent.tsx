@@ -11,9 +11,11 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (containerRef.current) {
-      Prism.highlightAllUnder(containerRef.current);
-    }
+    if (!containerRef.current) return;
+    Prism.highlightAllUnder(containerRef.current);
+    return () => {
+      // Cleanup if needed
+    };
   }, [content]);
 
   const parseMarkdown = (md: string) => {

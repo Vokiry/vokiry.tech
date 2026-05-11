@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 import { usePathname } from "next/navigation";
 
 type Section = "main" | "admin" | "tails";
@@ -20,23 +20,29 @@ export function SectionProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [section, setSection] = useState<Section>("main");
 
+  const updateSection = useCallback((newSection: Section) => {
+    const root = document.documentElement;
+    root.classList.remove("admin", "tails");
+    if (newSection === "admin") {
+      root.classList.add("admin");
+    } else if (newSection === "tails") {
+      root.classList.add("tails");
+    }
+    setSection(newSection);
+  }, []);
+
   useEffect(() => {
     if (pathname.startsWith("/admin")) {
-      setSection("admin");
-      document.documentElement.classList.add("admin");
-      document.documentElement.classList.remove("tails");
+      updateSection("admin");
     } else if (pathname.startsWith("/tails")) {
-      setSection("tails");
-      document.documentElement.classList.add("tails");
-      document.documentElement.classList.remove("admin");
+      updateSection("tails");
     } else {
-      setSection("main");
-      document.documentElement.classList.remove("admin", "tails");
+      updateSection("main");
     }
-  }, [pathname]);
+  }, [pathname, updateSection]);
 
   return (
-    <SectionContext.Provider value={{ section, setSection }}>
+    <SectionContext.Provider value={{ section, setSection: updateSection }}>
       {children}
     </SectionContext.Provider>
   );

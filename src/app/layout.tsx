@@ -38,7 +38,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[var(--bg-primary)]">
         <SectionProvider>
           <Navigation />
-          <main className="flex-1">
+          <main className="flex-1 md:pl-64">
             {children}
           </main>
           <Footer />

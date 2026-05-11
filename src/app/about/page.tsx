@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default function AboutPage() {
   const profile = getProfile();
-  const about = profile?.about || { whoAmI: "", whatIDo: "", fursona: { species: "", colors: [] } };
+  const about = profile?.about || { whoAmI: "", whatIDo: "" };
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -29,24 +29,6 @@ vokiry</pre>
           </h2>
           <p className="text-[var(--text-secondary)] leading-relaxed">
             {about.whoAmI || "I'm a full-stack developer passionate about building tools that make developers' lives easier."}
-          </p>
-        </section>
-
-        {/* Fursona */}
-        <section className="terminal-card p-6 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <span className="text-[var(--section-accent)]">~/about/fursona</span>
-          </h2>
-          <div className="font-mono text-sm text-[var(--text-secondary)]">
-            <p className="mb-2">
-              <span className="text-[var(--text-muted)]">species:</span> {about.fursona.species || "Red Panda"}
-            </p>
-            <p className="mb-2">
-              <span className="text-[var(--text-muted)]">colors:</span> [{about.fursona.colors.join(", ") || "Teal, Cyan, Red"}]
-            </p>
-          </div>
-          <p className="text-[var(--text-muted)] text-sm mt-3">
-            (Just a subtle reference for those who know ✨)
           </p>
         </section>
 
@@ -86,9 +68,6 @@ vokiry</pre>
         </Link>
         <Link href="/uses" className="text-[var(--text-muted)] hover:text-[var(--section-accent)] transition-colors">
           ~/uses
-        </Link>
-        <Link href="/tails" className="text-[var(--text-muted)] hover:text-[var(--section-accent)] transition-colors">
-          ~/tails
         </Link>
       </div>
     </div>

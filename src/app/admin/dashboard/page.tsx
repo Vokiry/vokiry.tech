@@ -33,12 +33,11 @@ interface Profile {
   about: {
     whoAmI: string;
     whatIDo: string;
-    fursona: { species: string; colors: string[] };
   };
   now: { item: string; description: string }[];
   uses: { hardware: string[]; software: string[] };
   tails: { status: string; location: string; tailLength: number; energy: number; napsToday: number; bamboo: number };
-  social: { github: string; twitter: string; linkedin: string; email: string };
+  social: { github: string; twitter: string; telegram: string; email: string };
 }
 
 type Tab = "posts" | "projects" | "skills" | "profile";
@@ -556,8 +555,8 @@ export default function AdminDashboard() {
                   className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
               </div>
               <div>
-                <label className="block text-sm mb-1 text-[var(--text-secondary)]">LinkedIn</label>
-                <input type="text" value={profile.social.linkedin} onChange={(e) => setProfile({...profile, social: {...profile.social, linkedin: e.target.value}})}
+                <label className="block text-sm mb-1 text-[var(--text-secondary)]">Telegram</label>
+                <input type="text" value={profile.social.telegram} onChange={(e) => setProfile({...profile, social: {...profile.social, telegram: e.target.value}})}
                   className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
               </div>
               <div>
