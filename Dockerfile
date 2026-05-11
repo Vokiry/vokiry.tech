@@ -6,7 +6,7 @@ RUN npm install -g npm@latest
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 FROM base AS builder
 WORKDIR /app

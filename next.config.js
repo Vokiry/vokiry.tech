@@ -2,7 +2,6 @@ const nextConfig = {
   output: 'standalone',
   experimental: {
     optimizeCss: true,
-    turbopack: {},
   },
 };
 
