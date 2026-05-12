@@ -148,6 +148,245 @@
 }
 
 /* ============================================
+   CRT EFFECTS - Playful
+   ============================================ */
+
+/* Scanlines overlay (fixed, on top, not blocking input) */
+.crt-scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.06) 0px,
+    rgba(0, 0, 0, 0.06) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+}
+
+.light .crt-scanlines { opacity: 0.25; }
+
+/* Very subtle vignette + flicker */
+.crt-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  animation: crt-flicker 6s infinite;
+}
+
+.light .crt-vignette { background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.08) 100%); }
+
+@keyframes crt-flicker {
+  0%, 96%, 100% { opacity: 1; }
+  97% { opacity: 0.94; }
+  98% { opacity: 1; }
+  99% { opacity: 0.97; }
+}
+
+/* Glitch text */
+.glitch-hover {
+  position: relative;
+  display: inline-block;
+}
+.glitch-hover:hover {
+  animation: glitch-skew 0.5s infinite linear alternate;
+}
+.glitch-hover:hover::before,
+.glitch-hover:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.glitch-hover:hover::before {
+  left: 2px;
+  text-shadow: -1px 0 var(--accent-pink);
+  clip-path: inset(0 0 60% 0);
+  animation: glitch-anim 1s infinite linear alternate-reverse;
+}
+.glitch-hover:hover::after {
+  left: -2px;
+  text-shadow: -1px 0 var(--accent-cyan);
+  clip-path: inset(50% 0 0 0);
+  animation: glitch-anim 1.4s infinite linear alternate-reverse;
+}
+@keyframes glitch-anim {
+  0%   { clip-path: inset(20% 0 40% 0); }
+  20%  { clip-path: inset(60% 0 10% 0); }
+  40%  { clip-path: inset(0 0 80% 0); }
+  60%  { clip-path: inset(40% 0 20% 0); }
+  80%  { clip-path: inset(70% 0 5% 0); }
+  100% { clip-path: inset(10% 0 60% 0); }
+}
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  50% { transform: skew(-0.5deg); }
+  100% { transform: skew(0.4deg); }
+}
+
+/* Magazine grid neon underline for headings */
+.neon-underline {
+  position: relative;
+  display: inline-block;
+}
+.neon-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--section-accent);
+  box-shadow: 0 0 8px var(--section-glow), 0 0 16px var(--section-glow);
+  transform: scaleX(0.4);
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+}
+.neon-underline:hover::after,
+a:hover .neon-underline::after {
+  transform: scaleX(1);
+}
+
+/* Bullet prompt > */
+.prompt-list li {
+  list-style: none;
+  position: relative;
+  padding-left: 1.25rem;
+}
+.prompt-list li::before {
+  content: ">";
+  position: absolute;
+  left: 0;
+  color: var(--section-accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* Magazine card */
+.mag-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.mag-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, var(--section-glow) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.mag-card:hover {
+  border-color: var(--section-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px var(--section-glow);
+}
+.mag-card:hover::before { opacity: 0.08; }
+
+.mag-card-tall {
+  grid-row: span 2;
+}
+
+@media (max-width: 768px) {
+  .mag-card-tall { grid-row: auto; }
+}
+
+/* Split-pane IDE hero */
+.ide-pane {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+.ide-tree {
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  padding: 1rem 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+.ide-tree-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.ide-tree-item:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+.ide-tree-item.active {
+  background: var(--bg-card-hover);
+  color: var(--section-accent);
+  border-left: 2px solid var(--section-accent);
+}
+.ide-content {
+  padding: 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  min-height: 320px;
+}
+.ide-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-top: 2px solid var(--section-accent);
+}
+.ide-tabbar {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+}
+.ide-linenum {
+  display: inline-block;
+  width: 2rem;
+  color: var(--text-muted);
+  user-select: none;
+  text-align: right;
+  padding-right: 0.75rem;
+}
+.ide-kw { color: var(--accent-cyan); }
+.ide-str { color: var(--accent-green); }
+.ide-com { color: var(--text-muted); font-style: italic; }
+.ide-prop { color: var(--accent-pink); }
+.ide-fn { color: #fbbf24; }
+
+/* Cursor in IDE */
+.ide-cursor {
+  display: inline-block;
+  width: 0.5rem;
+  height: 1em;
+  background: var(--section-accent);
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+
+/* ============================================
    BASE STYLES
    ============================================ */
 

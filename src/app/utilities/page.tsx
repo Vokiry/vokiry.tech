@@ -58,7 +58,8 @@ export default function UtilitiesPage() {
           }
           break;
         case "hash":
-          setOutput(`MD5: ${simpleHash(value)}\nSHA-1: ${simpleHash(value + "salt")}\nSHA-256: ${simpleHash(value + "pepper")}`);
+          setOutput("Computing...");
+          computeHashes(value).then(setOutput);
           break;
         case "timestamp": {
           const ts = parseInt(value);
@@ -91,14 +92,6 @@ export default function UtilitiesPage() {
     }
   };
 
-  const simpleHash = (str: string) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = ((hash << 5) - hash) + str.charCodeAt(i);
-      hash |= 0;
-    }
-    return Math.abs(hash).toString(16).padStart(8, "0");
-  };
 
   const copyToClipboard = (text?: string) => {
     const textToCopy = text || output;
@@ -252,6 +245,55 @@ export default function UtilitiesPage() {
   );
 }
 
+async function sha(algo: "SHA-1" | "SHA-256" | "SHA-384" | "SHA-512", text: string): Promise<string> {
+  const buf = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+function md5(input: string): string {
+  function rh(n: number) { let s = "", j; for (j = 0; j <= 3; j++) s += ((n >> (j * 8 + 4)) & 15).toString(16) + ((n >> (j * 8)) & 15).toString(16); return s; }
+  function ad(x: number, y: number) { const l = (x & 0xffff) + (y & 0xffff); return (((x >> 16) + (y >> 16) + (l >> 16)) << 16) | (l & 0xffff); }
+  function rl(n: number, c: number) { return (n << c) | (n >>> (32 - c)); }
+  function cm(q: number, a: number, b: number, x: number, s: number, t: number) { return ad(rl(ad(ad(a, q), ad(x, t)), s), b); }
+  function ff(a: number, b: number, c: number, d: number, x: number, s: number, t: number) { return cm((b & c) | (~b & d), a, b, x, s, t); }
+  function gg(a: number, b: number, c: number, d: number, x: number, s: number, t: number) { return cm((b & d) | (c & ~d), a, b, x, s, t); }
+  function hh(a: number, b: number, c: number, d: number, x: number, s: number, t: number) { return cm(b ^ c ^ d, a, b, x, s, t); }
+  function ii(a: number, b: number, c: number, d: number, x: number, s: number, t: number) { return cm(c ^ (b | ~d), a, b, x, s, t); }
+  function cb(s: string) {
+    const n = ((s.length + 8) >> 6) + 1; const b = new Array(n * 16).fill(0);
+    let i; for (i = 0; i < s.length; i++) b[i >> 2] |= s.charCodeAt(i) << ((i % 4) * 8);
+    b[i >> 2] |= 0x80 << ((i % 4) * 8); b[n * 16 - 2] = s.length * 8; return b;
+  }
+  const utf8 = unescape(encodeURIComponent(input));
+  const x = cb(utf8); let a = 1732584193, b = -271733879, c = -1732584194, d = 271733878;
+  for (let i = 0; i < x.length; i += 16) {
+    const oa = a, ob = b, oc = c, od = d;
+    a = ff(a, b, c, d, x[i + 0], 7, -680876936); d = ff(d, a, b, c, x[i + 1], 12, -389564586); c = ff(c, d, a, b, x[i + 2], 17, 606105819); b = ff(b, c, d, a, x[i + 3], 22, -1044525330);
+    a = ff(a, b, c, d, x[i + 4], 7, -176418897); d = ff(d, a, b, c, x[i + 5], 12, 1200080426); c = ff(c, d, a, b, x[i + 6], 17, -1473231341); b = ff(b, c, d, a, x[i + 7], 22, -45705983);
+    a = ff(a, b, c, d, x[i + 8], 7, 1770035416); d = ff(d, a, b, c, x[i + 9], 12, -1958414417); c = ff(c, d, a, b, x[i + 10], 17, -42063); b = ff(b, c, d, a, x[i + 11], 22, -1990404162);
+    a = ff(a, b, c, d, x[i + 12], 7, 1804603682); d = ff(d, a, b, c, x[i + 13], 12, -40341101); c = ff(c, d, a, b, x[i + 14], 17, -1502002290); b = ff(b, c, d, a, x[i + 15], 22, 1236535329);
+    a = gg(a, b, c, d, x[i + 1], 5, -165796510); d = gg(d, a, b, c, x[i + 6], 9, -1069501632); c = gg(c, d, a, b, x[i + 11], 14, 643717713); b = gg(b, c, d, a, x[i + 0], 20, -373897302);
+    a = gg(a, b, c, d, x[i + 5], 5, -701558691); d = gg(d, a, b, c, x[i + 10], 9, 38016083); c = gg(c, d, a, b, x[i + 15], 14, -660478335); b = gg(b, c, d, a, x[i + 4], 20, -405537848);
+    a = gg(a, b, c, d, x[i + 9], 5, 568446438); d = gg(d, a, b, c, x[i + 14], 9, -1019803690); c = gg(c, d, a, b, x[i + 3], 14, -187363961); b = gg(b, c, d, a, x[i + 8], 20, 1163531501);
+    a = gg(a, b, c, d, x[i + 13], 5, -1444681467); d = gg(d, a, b, c, x[i + 2], 9, -51403784); c = gg(c, d, a, b, x[i + 7], 14, 1735328473); b = gg(b, c, d, a, x[i + 12], 20, -1926607734);
+    a = hh(a, b, c, d, x[i + 5], 4, -378558); d = hh(d, a, b, c, x[i + 8], 11, -2022574463); c = hh(c, d, a, b, x[i + 11], 16, 1839030562); b = hh(b, c, d, a, x[i + 14], 23, -35309556);
+    a = hh(a, b, c, d, x[i + 1], 4, -1530992060); d = hh(d, a, b, c, x[i + 4], 11, 1272893353); c = hh(c, d, a, b, x[i + 7], 16, -155497632); b = hh(b, c, d, a, x[i + 10], 23, -1094730640);
+    a = hh(a, b, c, d, x[i + 13], 4, 681279174); d = hh(d, a, b, c, x[i + 0], 11, -358537222); c = hh(c, d, a, b, x[i + 3], 16, -722521979); b = hh(b, c, d, a, x[i + 6], 23, 76029189);
+    a = hh(a, b, c, d, x[i + 9], 4, -640364487); d = hh(d, a, b, c, x[i + 12], 11, -421815835); c = hh(c, d, a, b, x[i + 15], 16, 530742520); b = hh(b, c, d, a, x[i + 2], 23, -995338651);
+    a = ii(a, b, c, d, x[i + 0], 6, -198630844); d = ii(d, a, b, c, x[i + 7], 10, 1126891415); c = ii(c, d, a, b, x[i + 14], 15, -1416354905); b = ii(b, c, d, a, x[i + 5], 21, -57434055);
+    a = ii(a, b, c, d, x[i + 12], 6, 1700485571); d = ii(d, a, b, c, x[i + 3], 10, -1894986606); c = ii(c, d, a, b, x[i + 10], 15, -1051523); b = ii(b, c, d, a, x[i + 1], 21, -2054922799);
+    a = ii(a, b, c, d, x[i + 8], 6, 1873313359); d = ii(d, a, b, c, x[i + 15], 10, -30611744); c = ii(c, d, a, b, x[i + 6], 15, -1560198380); b = ii(b, c, d, a, x[i + 13], 21, 1309151649);
+    a = ii(a, b, c, d, x[i + 4], 6, -145523070); d = ii(d, a, b, c, x[i + 11], 10, -1120210379); c = ii(c, d, a, b, x[i + 2], 15, 718787259); b = ii(b, c, d, a, x[i + 9], 21, -343485551);
+    a = ad(a, oa); b = ad(b, ob); c = ad(c, oc); d = ad(d, od);
+  }
+  return rh(a) + rh(b) + rh(c) + rh(d);
+}
+
+async function computeHashes(text: string): Promise<string> {
+  const [s1, s256, s512] = await Promise.all([sha("SHA-1", text), sha("SHA-256", text), sha("SHA-512", text)]);
+  return `MD5:     ${md5(text)}\nSHA-1:   ${s1}\nSHA-256: ${s256}\nSHA-512: ${s512}`;
+}
+
 function getPlaceholder(tool: string): string {
   const placeholders: Record<string, string> = {
     json: '{"key": "value"}',
@@ -383,6 +425,74 @@ function rgbToHsl(r: number, g: number, b: number) {
   return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
 
+const CRON_RANGES: Record<string, [number, number]> = {
+  minute: [0, 59],
+  hour: [0, 23],
+  day: [1, 31],
+  month: [1, 12],
+  weekday: [0, 6],
+};
+
+function validateCronField(field: string, name: keyof typeof CRON_RANGES): string | null {
+  const [min, max] = CRON_RANGES[name];
+  if (field === "*") return null;
+
+  const tokens = field.split(",");
+  for (const tok of tokens) {
+    const [rangePart, stepPart] = tok.split("/");
+    if (stepPart !== undefined) {
+      const step = parseInt(stepPart);
+      if (!Number.isFinite(step) || step <= 0) return `${name}: invalid step "${stepPart}"`;
+    }
+    if (rangePart === "*") continue;
+    if (rangePart.includes("-")) {
+      const [a, b] = rangePart.split("-").map(Number);
+      if (!Number.isFinite(a) || !Number.isFinite(b)) return `${name}: invalid range "${rangePart}"`;
+      if (a < min || b > max || a > b) return `${name}: range ${a}-${b} out of bounds (${min}-${max})`;
+    } else {
+      const n = parseInt(rangePart);
+      if (!Number.isFinite(n)) return `${name}: not a number "${rangePart}"`;
+      if (n < min || n > max) return `${name}: value ${n} out of bounds (${min}-${max})`;
+    }
+  }
+  return null;
+}
+
+function cronFieldMatches(field: string, value: number): boolean {
+  if (field === "*") return true;
+  for (const tok of field.split(",")) {
+    const [rangePart, stepPart] = tok.split("/");
+    const step = stepPart ? parseInt(stepPart) : 1;
+    if (rangePart === "*") {
+      if (value % step === 0) return true;
+      continue;
+    }
+    if (rangePart.includes("-")) {
+      const [a, b] = rangePart.split("-").map(Number);
+      if (value >= a && value <= b && (value - a) % step === 0) return true;
+    } else {
+      const n = parseInt(rangePart);
+      if (stepPart) {
+        if (value >= n && (value - n) % step === 0) return true;
+      } else if (value === n) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function describeField(field: string, name: string, unit: string): string {
+  if (field === "*") return `every ${unit}`;
+  if (field.includes("/")) {
+    const [, step] = field.split("/");
+    return `every ${step} ${unit}${parseInt(step) > 1 ? "s" : ""}`;
+  }
+  if (field.includes(",")) return `at ${name}s ${field}`;
+  if (field.includes("-")) return `${name}s ${field}`;
+  return `at ${name} ${field}`;
+}
+
 function parseCron(expression: string): string {
   const parts = expression.trim().split(/\s+/);
   if (parts.length !== 5) {
@@ -390,102 +500,57 @@ function parseCron(expression: string): string {
   }
 
   const [minute, hour, day, month, weekday] = parts;
-  
-  const descriptions = [];
-  
-  // Minute
-  if (minute === '*') {
-    descriptions.push("Every minute");
-  } else if (minute.includes('/')) {
-    const [, step] = minute.split('/');
-    descriptions.push(`Every ${step} minutes`);
-  } else if (minute.includes(',')) {
-    descriptions.push(`At minutes: ${minute}`);
-  } else {
-    descriptions.push(`At minute ${minute}`);
-  }
-  
-  // Hour
-  if (hour === '*') {
-    descriptions.push("every hour");
-  } else if (hour.includes('/')) {
-    const [, step] = hour.split('/');
-    descriptions.push(`every ${step} hours`);
-  } else {
-    descriptions.push(`at hour ${hour}`);
-  }
-  
-  // Day
-  if (day === '*') {
-    // already covered
-  } else if (day !== '*') {
-    descriptions.push(`on day ${day}`);
-  }
-  
-  // Month
-  if (month === '*') {
-    // already covered
-  } else if (month !== '*') {
-    const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const monthNum = parseInt(month);
-    if (monthNum >= 1 && monthNum <= 12) {
-      descriptions.push(`in ${monthNames[monthNum]}`);
-    }
-  }
-  
-  // Weekday
-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  if (weekday !== '*') {
-    const dayNum = parseInt(weekday);
-    if (dayNum >= 0 && dayNum <= 6) {
-      descriptions.push(`on ${dayNames[dayNum]}`);
-    }
+  const fields: [string, keyof typeof CRON_RANGES][] = [
+    [minute, "minute"], [hour, "hour"], [day, "day"], [month, "month"], [weekday, "weekday"],
+  ];
+  for (const [val, name] of fields) {
+    const err = validateCronField(val, name);
+    if (err) return `Error: ${err}`;
   }
 
-  let result = "Runs: " + descriptions.join(" ") + "\n\nNext 5 runs:\n";
-  
-  // Calculate next runs
-  const now = new Date();
+  const monthNames = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const parts2: string[] = [];
+  parts2.push(describeField(minute, "minute", "minute"));
+  parts2.push(describeField(hour, "hour", "hour"));
+  if (day !== "*") parts2.push(`on day ${day}`);
+  if (month !== "*") {
+    const n = parseInt(month);
+    parts2.push(`in ${monthNames[n] ?? month}`);
+  }
+  if (weekday !== "*") {
+    const n = parseInt(weekday);
+    parts2.push(`on ${dayNames[n] ?? weekday}`);
+  }
+
+  const description = "Runs: " + parts2.join(", ");
+
   const runs: string[] = [];
-  let current = new Date(now);
-  
-  for (let i = 0; i < 5; i++) {
-    current = new Date(current.getTime() + 60000); // Add 1 minute
-    
-    // Parse cron and find next matching time (simplified)
-    const m = parseCronField(minute, current.getMinutes());
-    const h = parseCronField(hour, current.getHours());
-    const d = parseCronField(day, current.getDate());
-    const mo = parseCronField(month, current.getMonth() + 1);
-    const wd = parseCronField(weekday, current.getDay());
-    
-    if (m && h && d && mo && wd) {
-      runs.push(current.toISOString().replace('T', ' ').slice(0, 19));
-    } else {
-      // Skip to next minute and try again
-      i--;
-    }
-    
-    if (runs.length < 5 && i > 100) break; // Safety limit
-  }
-  
-  return result + runs.join('\n');
-}
+  const current = new Date();
+  current.setSeconds(0, 0);
+  current.setMinutes(current.getMinutes() + 1);
 
-function parseCronField(field: string, value: number): boolean {
-  if (field === '*') return true;
-  if (field.includes(',')) {
-    return field.split(',').map(Number).includes(value);
+  const MAX_ITER = 366 * 24 * 60;
+  let iter = 0;
+  while (runs.length < 5 && iter < MAX_ITER) {
+    iter++;
+    if (
+      cronFieldMatches(minute, current.getMinutes()) &&
+      cronFieldMatches(hour, current.getHours()) &&
+      cronFieldMatches(day, current.getDate()) &&
+      cronFieldMatches(month, current.getMonth() + 1) &&
+      cronFieldMatches(weekday, current.getDay())
+    ) {
+      runs.push(current.toISOString().replace("T", " ").slice(0, 19));
+    }
+    current.setMinutes(current.getMinutes() + 1);
   }
-  if (field.includes('/')) {
-    const [, step] = field.split('/');
-    return value % parseInt(step) === 0;
+
+  if (runs.length === 0) {
+    return description + "\n\nNo upcoming runs within the next year.";
   }
-  if (field.includes('-')) {
-    const [start, end] = field.split('-').map(Number);
-    return value >= start && value <= end;
-  }
-  return parseInt(field) === value;
+  return description + "\n\nNext " + runs.length + " runs:\n" + runs.join("\n");
 }
 
 function formatSql(sql: string): string {

@@ -1,30 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAllPosts, createPost, deletePost } from "@/lib/posts";
+import { isAdmin } from "@/lib/auth";
 
-export async function GET(request: NextRequest) {
-  const cookie = request.cookies.get("admin-auth");
-  if (cookie?.value !== "true") {
+async function guard() {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  return null;
+}
 
-  const posts = getAllPosts();
-  return NextResponse.json(posts);
+export async function GET() {
+  const denied = await guard();
+  if (denied) return denied;
+  return NextResponse.json(getAllPosts());
 }
 
 export async function POST(request: NextRequest) {
-  const cookie = request.cookies.get("admin-auth");
-  if (cookie?.value !== "true") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+  const denied = await guard();
+  if (denied) return denied;
   try {
-    const body = await request.json();
-    const { title, excerpt, tags, content } = body;
-
+    const { title, excerpt, tags, content } = await request.json();
     if (!title || !content) {
       return NextResponse.json({ error: "Title and content required" }, { status: 400 });
     }
-
     const post = createPost({
       title,
       excerpt: excerpt || "",
@@ -32,7 +30,6 @@ export async function POST(request: NextRequest) {
       content,
       date: new Date().toISOString().split("T")[0],
     });
-
     return NextResponse.json(post);
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 500 });
@@ -40,21 +37,11 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const cookie = request.cookies.get("admin-auth");
-  if (cookie?.value !== "true") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const { searchParams } = new URL(request.url);
-  const slug = searchParams.get("slug");
-
-  if (!slug) {
-    return NextResponse.json({ error: "Slug required" }, { status: 400 });
-  }
-
-  const deleted = deletePost(slug);
-  if (deleted) {
-    return NextResponse.json({ success: true });
-  }
-  return NextResponse.json({ error: "Post not found" }, { status: 404 });
+  const denied = await guard();
+  if (denied) return denied;
+  const slug = new URL(request.url).searchParams.get("slug");
+  if (!slug) return NextResponse.json({ error: "Slug required" }, { status: 400 });
+  return deletePost(slug)
+    ? NextResponse.json({ success: true })
+    : NextResponse.json({ error: "Post not found" }, { status: 404 });
 }

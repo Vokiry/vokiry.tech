@@ -1,105 +1,96 @@
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/icons/ArrowRightIcon";
-import { TerminalWindow } from "@/components/TerminalWindow";
+import { SplitPaneHero } from "@/components/SplitPaneHero";
 import { getProjects } from "@/lib/projects";
 import { getAllPosts } from "@/lib/posts";
 import { getProfile } from "@/lib/profile";
+import { getSkills } from "@/lib/skills";
 
 export const dynamic = "force-dynamic";
 
 export default function Home() {
   const projects = getProjects();
-  const featuredProjects = projects.filter(p => p.featured).slice(0, 2);
-  const posts = getAllPosts();
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, 3);
+  const posts = getAllPosts().slice(0, 3);
   const profile = getProfile();
-
-  const utilities = [
-    { name: "JSON Formatter", href: "/utilities" },
-    { name: "Base64 Encoder", href: "/utilities" },
-    { name: "Hash Generator", href: "/utilities" },
-  ];
+  const stack = getSkills().flatMap((s) => s.items).slice(0, 6);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Hero Section */}
-      <section className="py-16 animate-fade-in">
-        <div className="max-w-2xl">
-          <p className="text-[var(--section-accent)] font-mono mb-4 text-sm flex items-center gap-2">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+      {/* HERO — split-pane IDE */}
+      <section className="animate-fade-in">
+        <div className="mb-6 flex items-baseline gap-3">
+          <p className="text-[var(--section-accent)] font-mono text-sm flex items-center gap-2">
             <span className="animate-blink">❯</span>
-            <span>Hello, I am</span>
+            <span>hello.world</span>
           </p>
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            <span className="gradient-text">vokiry</span>
-          </h1>
-          <p className="text-xl text-[var(--text-secondary)] mb-6">
-            Full-stack developer building tools and experiences
-          </p>
-          <p className="text-[var(--text-muted)] mb-8 max-w-lg">
-            {profile?.about?.whoAmI || "I build developer utilities, share knowledge through writing, and create things that make life easier."}
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/portfolio"
-              className="btn-primary inline-flex items-center gap-2 hover-lift"
-            >
-              View Work
-              <ArrowRightIcon className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/about"
-              className="btn-secondary inline-flex items-center gap-2"
-            >
-              About Me
-            </Link>
-          </div>
+          <span className="text-[var(--text-muted)] text-xs font-mono">[esc]: nav</span>
+        </div>
+        <h1
+          className="glitch-hover text-5xl sm:text-7xl font-bold mb-6 gradient-text inline-block cursor-default"
+          data-text="vokiry"
+        >
+          vokiry
+        </h1>
+        <p className="text-xl text-[var(--text-secondary)] max-w-2xl mb-10">
+          Full-stack developer building tools and experiences. Terminal-flavored, monospace-pilled.
+        </p>
+
+        <SplitPaneHero
+          whoAmI={profile?.about?.whoAmI || "I build developer utilities, share knowledge through writing, and create things that make life easier."}
+          stack={stack.length > 0 ? stack : ["TypeScript", "Go", "Rust", "Next.js", "Postgres", "Linux"]}
+        />
+
+        <div className="flex flex-wrap gap-4 mt-8">
+          <Link href="/portfolio" className="btn-primary inline-flex items-center gap-2 hover-lift">
+            View Work
+            <ArrowRightIcon className="w-4 h-4" />
+          </Link>
+          <Link href="/about" className="btn-secondary inline-flex items-center gap-2">
+            About Me
+          </Link>
+          <Link href="/blog" className="btn-secondary inline-flex items-center gap-2">
+            Blog
+          </Link>
         </div>
       </section>
 
-      {/* Terminal ASCII Art */}
-      <section className="py-8 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-        <TerminalWindow title="~ vokiry@terminal">
-          <div className="font-mono text-xs text-[var(--text-primary)] leading-relaxed">
-            <span className="text-[var(--section-accent)]">$</span> fastfetch<br/>
-            <span className="text-[var(--accent-cyan)]">      /\\_/\\  </span><span className="text-[var(--text-muted)]">  vokiry</span><br/>
-            <span className="text-[var(--accent-cyan)]">     =(o.o)=  </span><br/>
-            <span className="text-[var(--accent-cyan)]">       )___)</span><br/>
-            <span className="text-[var(--section-accent)]">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span><br/>
-            <span className="text-[var(--text-muted)]">  user:</span>    vokiry<br/>
-            <span className="text-[var(--text-muted)]">  species:</span> red_panda<br/>
-            <span className="text-[var(--text-muted)]">  colors:</span>  teal, cyan, red<br/>
-            <span className="text-[var(--section-accent)]">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
-          </div>
-        </TerminalWindow>
-      </section>
-
-      {/* Featured Projects */}
+      {/* Featured projects — magazine grid */}
       {featuredProjects.length > 0 && (
-        <section className="py-8 animate-slide-up" style={{ animationDelay: "0.15s" }}>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold">Featured Projects</h2>
-            <Link href="/portfolio" className="text-[var(--section-accent)] hover:underline text-sm">
-              View all →
+        <section className="animate-slide-up" style={{ animationDelay: "0.15s" }}>
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <p className="text-[var(--section-accent)] font-mono text-sm mb-1">~/featured</p>
+              <h2 className="text-3xl font-bold">
+                <span className="neon-underline">Selected Work</span>
+              </h2>
+            </div>
+            <Link href="/portfolio" className="text-[var(--section-accent)] hover:underline text-sm font-mono">
+              all projects →
             </Link>
           </div>
-          <div className="grid sm:grid-cols-2 gap-4 stagger-2">
-            {featuredProjects.map((project) => (
+
+          <div className="grid md:grid-cols-3 md:grid-rows-2 gap-4 auto-rows-fr">
+            {featuredProjects.map((project, i) => (
               <Link
                 key={project.slug}
                 href="/portfolio"
-                className="terminal-card p-6 block group"
+                className={`mag-card p-6 block group ${i === 0 ? "md:col-span-2 md:row-span-2" : ""}`}
               >
-                <h3 className="text-lg font-semibold mb-2 group-hover:text-[var(--section-accent)] transition-colors">
-                  {project.title}
+                <div className="flex items-center gap-2 mb-3 text-xs font-mono text-[var(--text-muted)]">
+                  <span>[{String(i + 1).padStart(2, "0")}]</span>
+                  <span>·</span>
+                  <span>{project.tech[0]}</span>
+                </div>
+                <h3 className={`font-bold mb-3 group-hover:text-[var(--section-accent)] transition-colors ${i === 0 ? "text-3xl md:text-4xl" : "text-xl"}`}>
+                  <span className="neon-underline">{project.title}</span>
                 </h3>
-                <p className="text-[var(--text-secondary)] text-sm mb-4">
+                <p className={`text-[var(--text-secondary)] ${i === 0 ? "text-base" : "text-sm"} mb-4`}>
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {project.tech.slice(0, 3).map((t) => (
-                    <span
-                      key={t}
-                      className="px-2 py-1 text-xs rounded bg-[var(--bg-card)] text-[var(--text-muted)]"
-                    >
+                  {project.tech.slice(0, i === 0 ? 6 : 3).map((t) => (
+                    <span key={t} className="px-2 py-0.5 text-xs rounded bg-[var(--bg-card)] text-[var(--text-muted)] font-mono">
                       {t}
                     </span>
                   ))}
@@ -110,54 +101,56 @@ export default function Home() {
         </section>
       )}
 
-      {/* Recent Posts */}
-      <section className="py-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold">Recent Posts</h2>
-          <Link href="/blog" className="text-[var(--section-accent)] hover:underline text-sm">
-            View all →
+      {/* Recent posts */}
+      <section className="animate-slide-up" style={{ animationDelay: "0.2s" }}>
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <p className="text-[var(--section-accent)] font-mono text-sm mb-1">~/writes</p>
+            <h2 className="text-3xl font-bold">
+              <span className="neon-underline">Latest Posts</span>
+            </h2>
+          </div>
+          <Link href="/blog" className="text-[var(--section-accent)] hover:underline text-sm font-mono">
+            all posts →
           </Link>
         </div>
+
         {posts.length === 0 ? (
-          <TerminalWindow variant="minimal">
-            <p className="text-[var(--text-muted)]">No posts yet. Start writing!</p>
-          </TerminalWindow>
+          <p className="text-[var(--text-muted)] font-mono">$ ls posts/ — empty.</p>
         ) : (
-          <div className="space-y-3 stagger-3">
-            {posts.slice(0, 3).map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="terminal-card p-4 block group"
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="font-medium group-hover:text-[var(--section-accent)] transition-colors">
+          <ul className="prompt-list space-y-3 font-mono">
+            {posts.map((post) => (
+              <li key={post.slug}>
+                <Link href={`/blog/${post.slug}`} className="group flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 py-2 border-b border-[var(--border)] hover:border-[var(--section-accent)] transition-colors">
+                  <time className="text-xs text-[var(--text-muted)] tabular-nums w-24">{post.date}</time>
+                  <span className="text-lg group-hover:text-[var(--section-accent)] transition-colors flex-1">
                     {post.title}
-                  </h3>
-                  <span className="text-sm text-[var(--text-muted)]">{post.date}</span>
-                </div>
-              </Link>
+                  </span>
+                  <span className="text-xs text-[var(--text-muted)]">
+                    {post.tags.slice(0, 2).join(" · ")}
+                  </span>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </section>
 
-      {/* Quick Utilities */}
-      <section className="py-8 animate-slide-up" style={{ animationDelay: "0.25s" }}>
-        <h2 className="text-2xl font-semibold mb-6">Quick Utilities</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 stagger-4">
-          {utilities.map((util) => (
-            <Link
-              key={util.name}
-              href={util.href}
-              className="terminal-card p-4 text-center group hover-scale"
-            >
-              <span className="text-[var(--text-secondary)] group-hover:text-[var(--section-accent)] transition-colors">
-                {util.name}
-              </span>
-            </Link>
-          ))}
-        </div>
+      {/* Quick utilities */}
+      <section className="animate-slide-up" style={{ animationDelay: "0.25s" }}>
+        <p className="text-[var(--section-accent)] font-mono text-sm mb-1">~/tools</p>
+        <h2 className="text-3xl font-bold mb-8">
+          <span className="neon-underline">Devtools</span>
+        </h2>
+        <Link href="/utilities" className="mag-card p-6 block group">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-mono text-sm text-[var(--text-muted)]">$ ls utilities/</span>
+            <span className="text-[var(--section-accent)] text-sm font-mono group-hover:translate-x-1 transition-transform inline-block">→</span>
+          </div>
+          <p className="font-mono text-sm text-[var(--text-primary)]">
+            json · base64 · url · hash · color · timestamp · cron · sql
+          </p>
+        </Link>
       </section>
     </div>
   );

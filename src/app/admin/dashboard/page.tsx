@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 interface Post {
   slug: string;
@@ -46,7 +46,6 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<Tab>("posts");
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
-  const router = useRouter();
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -67,13 +66,8 @@ export default function AdminDashboard() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const auth = document.cookie.includes("admin-auth=true");
-    if (!auth) {
-      router.push("/admin");
-      return;
-    }
     fetchAll();
-  }, [router]);
+  }, []);
 
   const fetchAll = async () => {
     setLoading(true);
@@ -110,8 +104,7 @@ export default function AdminDashboard() {
   };
 
   const handleLogout = () => {
-    document.cookie = "admin-auth=; path=/; max-age=0";
-    router.push("/");
+    signOut({ callbackUrl: "/" });
   };
 
   const showMessage = (msg: string) => {

@@ -8,7 +8,12 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - AUTH_SECRET=${AUTH_SECRET}
+      - AUTH_URL=${AUTH_URL:-https://vokiry.tech}
+      - AUTH_TRUST_HOST=true
+      - AUTH_GITHUB_ID=${AUTH_GITHUB_ID}
+      - AUTH_GITHUB_SECRET=${AUTH_GITHUB_SECRET}
+      - ADMIN_GITHUB_LOGINS=${ADMIN_GITHUB_LOGINS:-vokiry}
     expose:
       - "3000"
     healthcheck:

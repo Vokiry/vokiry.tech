@@ -1,65 +1,48 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getProjects, addProject, updateProject, deleteProject } from "@/lib/projects";
+import { isAdmin } from "@/lib/auth";
 
-export async function GET(request: NextRequest) {
-  const cookie = request.cookies.get("admin-auth");
-  if (cookie?.value !== "true") {
+async function guard() {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  return null;
+}
 
-  try {
-    const projects = getProjects();
-    return NextResponse.json(projects);
-  } catch {
-    return NextResponse.json({ error: "Failed to fetch projects" }, { status: 500 });
-  }
+export async function GET() {
+  const denied = await guard();
+  if (denied) return denied;
+  return NextResponse.json(getProjects());
 }
 
 export async function POST(request: NextRequest) {
-  const cookie = request.cookies.get("admin-auth");
-  if (cookie?.value !== "true") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+  const denied = await guard();
+  if (denied) return denied;
   try {
     const body = await request.json();
-    
-    const newProject = addProject({
+    const project = addProject({
       title: body.title || "",
       description: body.description || "",
       tech: body.tech || [],
       live: body.live || "",
       github: body.github || "",
-      featured: body.featured || false,
+      featured: !!body.featured,
       order: body.order || 999,
     });
-
-    return NextResponse.json(newProject);
+    return NextResponse.json(project);
   } catch {
     return NextResponse.json({ error: "Failed to create project" }, { status: 500 });
   }
 }
 
 export async function PUT(request: NextRequest) {
-  const cookie = request.cookies.get("admin-auth");
-  if (cookie?.value !== "true") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+  const denied = await guard();
+  if (denied) return denied;
   try {
-    const body = await request.json();
-    const { slug, ...data } = body;
-    
-    if (!slug) {
-      return NextResponse.json({ error: "Slug required" }, { status: 400 });
-    }
-
+    const { slug, ...data } = await request.json();
+    if (!slug) return NextResponse.json({ error: "Slug required" }, { status: 400 });
     const updated = updateProject(slug, data);
-    
-    if (!updated) {
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
-    }
-
+    if (!updated) return NextResponse.json({ error: "Project not found" }, { status: 404 });
     return NextResponse.json(updated);
   } catch {
     return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
@@ -67,27 +50,11 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const cookie = request.cookies.get("admin-auth");
-  if (cookie?.value !== "true") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  try {
-    const { searchParams } = new URL(request.url);
-    const slug = searchParams.get("slug");
-    
-    if (!slug) {
-      return NextResponse.json({ error: "Slug required" }, { status: 400 });
-    }
-
-    const success = deleteProject(slug);
-    
-    if (!success) {
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
-    }
-
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
-  }
+  const denied = await guard();
+  if (denied) return denied;
+  const slug = new URL(request.url).searchParams.get("slug");
+  if (!slug) return NextResponse.json({ error: "Slug required" }, { status: 400 });
+  return deleteProject(slug)
+    ? NextResponse.json({ success: true })
+    : NextResponse.json({ error: "Project not found" }, { status: 404 });
 }

@@ -37,8 +37,10 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${jetbrainsMono.variable}`}>
       <body className="min-h-full flex flex-col bg-[var(--bg-primary)]">
         <SectionProvider>
+          <div className="crt-scanlines" aria-hidden />
+          <div className="crt-vignette" aria-hidden />
           <Navigation />
-          <main className="flex-1 md:pl-64">
+          <main className="flex-1 md:pl-64 relative z-[2]">
             {children}
           </main>
           <Footer />
