@@ -1,27 +1,40 @@
 import { NextResponse } from "next/server";
+import { getAllPosts } from "@/lib/posts";
 
 const siteUrl = "https://vokiry.tech";
 
-const pages = [
-  { path: "/", priority: "1.0", changefreq: "weekly" },
-  { path: "/about", priority: "0.8", changefreq: "monthly" },
-  { path: "/portfolio", priority: "0.8", changefreq: "monthly" },
-  { path: "/blog", priority: "0.9", changefreq: "weekly" },
-  { path: "/utilities", priority: "0.7", changefreq: "monthly" },
-  { path: "/contact", priority: "0.6", changefreq: "monthly" },
-  { path: "/uses", priority: "0.5", changefreq: "monthly" },
-  { path: "/now", priority: "0.5", changefreq: "weekly" },
-  { path: "/tails", priority: "0.5", changefreq: "monthly" },
+const staticPages = [
+  { path: "/", priority: "1.0", changefreq: "daily" },
+  { path: "/live", priority: "0.9", changefreq: "daily" },
+  { path: "/crafts", priority: "0.9", changefreq: "weekly" },
+  { path: "/hardware", priority: "0.8", changefreq: "monthly" },
+  { path: "/notes", priority: "0.9", changefreq: "weekly" },
+  { path: "/wall", priority: "0.8", changefreq: "daily" },
+  { path: "/tools", priority: "0.8", changefreq: "monthly" },
+  { path: "/about", priority: "0.6", changefreq: "monthly" },
 ];
 
 export async function GET() {
+  const posts = getAllPosts();
+  const postPages = posts.map((p) => ({
+    path: `/notes/${p.slug}`,
+    priority: "0.8",
+    changefreq: "monthly",
+  }));
+
+  const allPages = [...staticPages, ...postPages];
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages.map(page => `  <url>
+${allPages
+  .map(
+    (page) => `  <url>
     <loc>${siteUrl}${page.path}</loc>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
-  </url>`).join('\n')}
+  </url>`
+  )
+  .join("\n")}
 </urlset>`;
 
   return new NextResponse(sitemap, {

@@ -8,6 +8,19 @@ export interface NowItem {
   description: string;
 }
 
+export interface HardwareItem {
+  name: string;
+  spec: string;
+  note: string;
+}
+
+export interface HardwareCategories {
+  computer: HardwareItem[];
+  peripherals: HardwareItem[];
+  streaming: HardwareItem[];
+  software: HardwareItem[];
+}
+
 export interface Uses {
   hardware: string[];
   software: string[];
@@ -23,6 +36,7 @@ export interface TailsStats {
 }
 
 export interface Social {
+  twitch?: string;
   github: string;
   twitter: string;
   telegram: string;
@@ -37,8 +51,9 @@ export interface About {
 export interface Profile {
   about: About;
   now: NowItem[];
-  uses: Uses;
-  tails: TailsStats;
+  hardware?: HardwareCategories;
+  uses?: Uses;
+  tails?: TailsStats;
   social: Social;
 }
 
@@ -79,9 +94,30 @@ export function getNowItems(): NowItem[] {
   return profile?.now || [];
 }
 
+export function getHardware(): HardwareCategories {
+  const profile = getProfile();
+  return profile?.hardware || {
+    computer: [],
+    peripherals: [],
+    streaming: [],
+    software: [],
+  };
+}
+
 export function getUses(): Uses {
   const profile = getProfile();
-  return profile?.uses || { hardware: [], software: [] };
+  if (profile?.uses) return profile.uses;
+  if (profile?.hardware) {
+    return {
+      hardware: [
+        ...profile.hardware.computer.map((c) => `${c.name}: ${c.spec}`),
+        ...profile.hardware.peripherals.map((c) => `${c.name}: ${c.spec}`),
+        ...profile.hardware.streaming.map((c) => `${c.name}: ${c.spec}`),
+      ],
+      software: profile.hardware.software.map((s) => `${s.name}: ${s.spec}`),
+    };
+  }
+  return { hardware: [], software: [] };
 }
 
 export function getTailsStats(): TailsStats {
@@ -99,6 +135,7 @@ export function getTailsStats(): TailsStats {
 export function getSocial(): Social {
   const profile = getProfile();
   return profile?.social || {
+    twitch: "https://twitch.tv/vokiry",
     github: "",
     twitter: "",
     telegram: "",

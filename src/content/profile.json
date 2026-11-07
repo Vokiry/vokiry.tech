@@ -1,36 +1,44 @@
 {
   "about": {
-    "whoAmI": "I'm a full-stack developer passionate about building tools that make developers' lives easier. I enjoy working on projects that solve real problems and exploring new technologies.",
-    "whatIDo": "I build web applications, developer tools, and explore the latest in the JavaScript ecosystem. When I'm not coding, I write about what I'm learning and experiment with new frameworks."
+    "whoAmI": "Дурной вайбкодер и микростример (медианищета). Пишу код на чистом вайбе, ковыряю Linux, стримлю эксперименты на Twitch и собираю TUI-оверлеи.",
+    "whatIDo": "Разрабатываю веб-приложения, автоматизирую стримы на Python/OBS WebSocket, пилю скрипты и делюсь графоманией."
   },
   "now": [
     {
-      "item": "Building vokiry.tech",
-      "description": "Working on this portfolio site and adding new features"
+      "item": "Редизайн vokiry.tech (v0.3.0)",
+      "description": "Переезд на дизайн-систему System24 × Tsubi Club на палитре Catppuccin Mocha/Latte"
     },
     {
-      "item": "Learning Next.js 16",
-      "description": "Exploring the latest Next.js features and improvements"
+      "item": "OBS-Templates",
+      "description": "Развитие TUI-оверлеев и bridge-сервисов для трансляций на Twitch"
     }
   ],
-  "uses": {
-    "hardware": [
-      "MacBook Pro M3",
-      "Keychron K2 Mechanical Keyboard"
+  "hardware": {
+    "computer": [
+      { "name": "Основная пекарня", "spec": "AMD Ryzen / 32GB RAM / NVMe SSD", "note": "Рендерит стрим в 1080p60 и не захлебывается при 50 вкладках" },
+      { "name": "Мобильный сетап", "spec": "MacBook Pro M3", "note": "Для вайбкодинга на диване или в дороге" }
+    ],
+    "peripherals": [
+      { "name": "Клавиатура", "spec": "Keychron K2 Mechanical Keyboard", "note": "Громко стучит в микрофон на ночных стримах" },
+      { "name": "Мышь", "spec": "Беспроводная мышь с высоким DPI", "note": "Пережила сотни кликов по коммитам" },
+      { "name": "Мониторы", "spec": "Основной 27\" QHD + Второй вертикальный для чата Twitch", "note": "Вертикальный экран спасает от пропуска сообщений" }
+    ],
+    "streaming": [
+      { "name": "Микрофон", "spec": "Конденсаторный USB микрофон + пантограф", "note": "С поп-фильтром, чтобы медианищета звучала кристально чисто" },
+      { "name": "Камера", "spec": "1080p веб-камера с ручной экспозицией", "note": "Показывает лицо автора в 60 FPS" },
+      { "name": "Свет", "spec": "Теплый рассеянный свет + фоновый RGB акцент", "note": "Создает нужный кибер-вайб в комнате" },
+      { "name": "Наушники", "spec": "Мониторные закрытые наушники", "note": "Никакого эха в микрофон" }
     ],
     "software": [
-      "kitty"
+      { "name": "Терминал", "spec": "Kitty Terminal", "note": "Быстрый, с поддержкой лигатур и Kitty graphics protocol" },
+      { "name": "Шелл & Конфиги", "spec": "Fish shell + Starship prompt", "note": "Автодополнение и стрелочки, экономящие секунды жизни" },
+      { "name": "Стрим-софт", "spec": "OBS Studio + OBS WebSocket 5.x", "note": "Интегрирован с кастомным локальным мостом на Python" },
+      { "name": "Редакторы кода", "spec": "Neovim + VSCode + Cursor", "note": "Когда надо быстро — Neovim, когда вайбкод — всё подряд" },
+      { "name": "Цветовая схема", "spec": "Catppuccin Mocha (Dark) / Latte (Light)", "note": "Глаза отдыхают даже в 4 утра" }
     ]
   },
-  "tails": {
-    "status": "fluffy",
-    "location": "somewhere warm",
-    "tailLength": 50,
-    "energy": 50,
-    "napsToday": 0,
-    "bamboo": 0
-  },
   "social": {
+    "twitch": "https://twitch.tv/vokiry",
     "github": "https://github.com/Vokiry",
     "twitter": "https://twitter.com/Vokkiry",
     "telegram": "https://t.me/Vokiry",

@@ -1,30 +1,37 @@
 import type { Metadata } from "next";
-import { Geist, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { SectionProvider } from "@/components/SectionContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-display",
   subsets: ["latin"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ["400", "500", "600", "700"],
   variable: "--font-mono",
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
+});
+
+const ibmPlexSans = IBM_Plex_Sans({
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
+  subsets: ["latin", "cyrillic"],
 });
 
 export const metadata: Metadata = {
-  title: "vokiry.tech",
-  description: "Developer portfolio, utilities, and blog",
-  keywords: ["developer", "portfolio", "utilities", "blog", "tools"],
+  title: "vokiry.tech // станция",
+  description: "Дурной вайбкодер × Медианищета // Личная станция и лаборатория",
+  keywords: ["vokiry", "вайбкод", "стримы", "медианищета", "костыли", "twitch", "разработка"],
   authors: [{ name: "vokiry" }],
   openGraph: {
-    title: "vokiry.tech",
-    description: "Developer portfolio, utilities, and blog",
+    title: "vokiry.tech // станция",
+    description: "Дурной вайбкодер × Медианищета",
     type: "website",
-    locale: "en_US",
+    locale: "ru_RU",
   },
 };
 
@@ -34,13 +41,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-full flex flex-col bg-[var(--bg-primary)]">
+    <html
+      lang="ru"
+      className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} ${ibmPlexSans.variable} font-sans`}
+    >
+      <body className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] bg-tactical-grid">
         <SectionProvider>
-          <div className="crt-scanlines" aria-hidden />
-          <div className="crt-vignette" aria-hidden />
           <Navigation />
-          <main className="flex-1 md:pl-64 relative z-[2]">
+          <main className="flex-1 w-full relative z-[1]">
             {children}
           </main>
           <Footer />

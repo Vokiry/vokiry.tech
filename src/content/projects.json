@@ -1,60 +1,92 @@
 [
   {
-    "slug": "project-alpha",
-    "title": "Project Alpha",
-    "description": "A powerful tool for developers to streamline their workflow. Built with Next.js and TypeScript.",
+    "slug": "obs-templates",
+    "title": "OBS-Templates (System24)",
+    "description": "Полноценный комплексный TUI-оверлей и broadcast HUD для стримов в стиле system24 (btop/lazygit). Локальный bridge на Python, виджеты чата с 7TV, TTS, сбор донатов и аудио-интро.",
     "tech": [
-      "Next.js",
-      "TypeScript",
-      "PostgreSQL",
-      "Prisma"
+      "Python",
+      "OBS WebSocket",
+      "HTML/CSS/JS",
+      "Yandex TTS",
+      "Twitch IRC"
     ],
-    "live": "#",
-    "github": "#",
+    "live": "",
+    "github": "https://github.com/Vokiry/OBS-Templates",
     "featured": true,
     "order": 1
   },
   {
-    "slug": "project-beta",
-    "title": "Project Beta",
-    "description": "Real-time collaboration platform for remote teams with WebSocket support.",
+    "slug": "vokiry-tech",
+    "title": "vokiry.tech // станция",
+    "description": "Персональный цифровой хаб и пульт управления вайбкодера. Дизайн-система System24 × Tsubi Club на палитре Catppuccin, интеграция Twitch Helix API, деплой на Docker + Nginx + Let's Encrypt.",
     "tech": [
-      "React",
-      "Node.js",
-      "WebSockets",
-      "Redis"
+      "Next.js 16",
+      "React 19",
+      "Tailwind v4",
+      "TypeScript",
+      "Docker"
     ],
-    "live": "#",
-    "github": "#",
+    "live": "https://vokiry.tech",
+    "github": "https://github.com/Vokiry/vokiry.tech",
     "featured": true,
     "order": 2
   },
   {
-    "slug": "project-gamma",
-    "title": "Project Gamma",
-    "description": "API documentation generator with automatic schema extraction.",
+    "slug": "alerts-bridge",
+    "title": "Stream Alerts & Donation Bridge",
+    "description": "Сверхлегкий асинхронный мост событий между DonationAlerts, DonateX, Twitch EventSub и браузерными источниками OBS без сторонних серверов и задержек.",
     "tech": [
-      "TypeScript",
-      "Express",
-      "OpenAPI"
+      "Python",
+      "WebSockets",
+      "DonationAlerts",
+      "DonateX API"
     ],
-    "live": "#",
-    "github": "#",
-    "featured": false,
+    "live": "",
+    "github": "https://github.com/Vokiry/OBS-Templates/tree/main/bridge",
+    "featured": true,
     "order": 3
   },
   {
-    "title": "test project",
-    "description": "test desc",
+    "slug": "stream-audio-deck",
+    "title": "Stream SFX Deck & Soundboard",
+    "description": "Минималистичный локальный саундпад для эфиров: воспроизведение сэмплов по горячим клавишам, реакция на команды чата и нормализация громкости.",
     "tech": [
-      "babmoo",
-      "2 shawarmas",
-      "89 RedBulls"
+      "Web Audio API",
+      "JavaScript",
+      "Cyberpunk SFX"
     ],
     "live": "",
-    "github": "https://github.com/nah_lul",
+    "github": "https://github.com/Vokiry",
     "featured": false,
-    "order": 999,
-    "slug": "test-project"
+    "order": 4
+  },
+  {
+    "slug": "dev-toolbox",
+    "title": "Vibe-Coder Workbench",
+    "description": "Набор карманных инструментов разработчика: форматирование JSON, Base64 энкодер/декодер, парсер cron-выражений, конвертер цветов и генератор хешей без рекламы.",
+    "tech": [
+      "TypeScript",
+      "React 19",
+      "Next.js"
+    ],
+    "live": "/tools",
+    "github": "https://github.com/Vokiry/vokiry.tech/tree/main/src/app/tools",
+    "featured": false,
+    "order": 5
+  },
+  {
+    "slug": "night-vibe-setup",
+    "title": "Dotfiles & Dev Environment",
+    "description": "Конфигурация рабочего пространства медианищеты: Kitty terminal, Neovim, Fish shell, Catppuccin Mocha theme и самописные скрипты для автоматизации стрима.",
+    "tech": [
+      "Kitty",
+      "Linux",
+      "Bash",
+      "Catppuccin"
+    ],
+    "live": "/hardware",
+    "github": "https://github.com/Vokiry",
+    "featured": false,
+    "order": 6
   }
 ]

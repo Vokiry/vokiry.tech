@@ -9,25 +9,29 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button
-        className="p-2 rounded-md text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--bg-secondary)] transition-colors"
-        aria-label="Toggle theme"
-      >
-        <div className="w-5 h-5" />
-      </button>
+      <div className="w-8 h-8 border border-[var(--border-subtle)] bg-[var(--bg-tertiary)]" />
     );
   }
+
+  const isDark = theme === "dark";
 
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-md text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--bg-secondary)] transition-all hover:scale-110"
-      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+      className="aug-br flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono border border-[var(--border)] bg-[var(--bg-tertiary)] hover:border-ctp-mauve hover:text-ctp-mauve text-[var(--text-secondary)] transition-all cursor-pointer"
+      title={isDark ? "Переключить на Catppuccin Latte" : "Переключить на Catppuccin Mocha"}
+      aria-label={`Switch theme (currently ${isDark ? "Mocha" : "Latte"})`}
     >
-      {theme === "dark" ? (
-        <MoonIcon className="w-5 h-5" />
+      {isDark ? (
+        <>
+          <MoonIcon className="w-3.5 h-3.5 text-ctp-mauve" />
+          <span className="text-[10px] uppercase tracking-wider hidden sm:inline">Mocha</span>
+        </>
       ) : (
-        <SunIcon className="w-5 h-5" />
+        <>
+          <SunIcon className="w-3.5 h-3.5 text-ctp-peach" />
+          <span className="text-[10px] uppercase tracking-wider hidden sm:inline">Latte</span>
+        </>
       )}
     </button>
   );

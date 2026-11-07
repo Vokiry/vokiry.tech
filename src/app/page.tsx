@@ -1,156 +1,309 @@
 import Link from "next/link";
-import { ArrowRightIcon } from "@/components/icons/ArrowRightIcon";
-import { SplitPaneHero } from "@/components/SplitPaneHero";
 import { getProjects } from "@/lib/projects";
 import { getAllPosts } from "@/lib/posts";
-import { getProfile } from "@/lib/profile";
-import { getSkills } from "@/lib/skills";
+import { LiveStreamWidget } from "@/components/LiveStreamWidget";
 
 export const dynamic = "force-dynamic";
 
 export default function Home() {
   const projects = getProjects();
-  const featuredProjects = projects.filter((p) => p.featured).slice(0, 3);
+  const featuredProjects = projects.filter((p) => p.featured || p.order <= 3).slice(0, 3);
   const posts = getAllPosts().slice(0, 3);
-  const profile = getProfile();
-  const stack = getSkills().flatMap((s) => s.items).slice(0, 6);
+
+  const sections = [
+    {
+      code: "02",
+      href: "/live",
+      title: "~/подруб",
+      subtitle: "Twitch стрим и статус",
+      desc: "Эфир на twitch.tv/vokiry, расписание, клипы, команды чата и донаты.",
+      accent: "text-ctp-red",
+      border: "hover:border-ctp-red/50",
+    },
+    {
+      code: "03",
+      href: "/crafts",
+      title: "~/костыли",
+      subtitle: "Проекты и вайбкод",
+      desc: "OBS-шаблоны, кастомные оверлеи, скрипты на коленке, телеграм-боты и опенсорс.",
+      accent: "text-ctp-mauve",
+      border: "hover:border-ctp-mauve/50",
+    },
+    {
+      code: "04",
+      href: "/hardware",
+      title: "~/железки",
+      subtitle: "Сетап медианищеты",
+      desc: "Честный разбор рабочего ПК, мониторов, микрофона, камеры и софта.",
+      accent: "text-ctp-teal",
+      border: "hover:border-ctp-teal/50",
+    },
+    {
+      code: "05",
+      href: "/notes",
+      title: "~/графомания",
+      subtitle: "Мысли и заметки",
+      desc: "Статьи про разработку, грабли в Linux/Next.js, стриминг и автоматизацию.",
+      accent: "text-ctp-peach",
+      border: "hover:border-ctp-peach/50",
+    },
+    {
+      code: "06",
+      href: "/wall",
+      title: "~/забор",
+      subtitle: "Гостевая чат-стена",
+      desc: "Оставить памятную надпись на стене станции через GitHub.",
+      accent: "text-ctp-sapphire",
+      border: "hover:border-ctp-sapphire/50",
+    },
+    {
+      code: "07",
+      href: "/tools",
+      title: "~/верстак",
+      subtitle: "Микро-утилиты",
+      desc: "Быстрый JSON, Base64, Cron, Color и хеширование без рекламы.",
+      accent: "text-ctp-green",
+      border: "hover:border-ctp-green/50",
+    },
+  ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
-      {/* HERO — split-pane IDE */}
-      <section className="animate-fade-in">
-        <div className="mb-6 flex items-baseline gap-3">
-          <p className="text-[var(--section-accent)] font-mono text-sm flex items-center gap-2">
-            <span className="animate-blink">❯</span>
-            <span>hello.world</span>
-          </p>
-          <span className="text-[var(--text-muted)] text-xs font-mono">[esc]: nav</span>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14">
+      {/* --------------------------------------------------------------------
+          HERO — Station Header
+          -------------------------------------------------------------------- */}
+      <section className="space-y-6">
+        <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-ctp-subtext0">
+          <span className="tui-chip aug-br text-ctp-mauve">
+            [ STATION_ID: VOKIRY-01 ]
+          </span>
+          <span className="text-ctp-overlay0">//</span>
+          <span>MODE: VIBE_CODING</span>
+          <span className="text-ctp-overlay0">//</span>
+          <span className="text-ctp-green">STATION: OPERATIONAL</span>
         </div>
-        <h1
-          className="glitch-hover text-5xl sm:text-7xl font-bold mb-6 gradient-text inline-block cursor-default"
-          data-text="vokiry"
-        >
-          vokiry
-        </h1>
-        <p className="text-xl text-[var(--text-secondary)] max-w-2xl mb-10">
-          Full-stack developer building tools and experiences. Terminal-flavored, monospace-pilled.
-        </p>
 
-        <SplitPaneHero
-          whoAmI={profile?.about?.whoAmI || "I build developer utilities, share knowledge through writing, and create things that make life easier."}
-          stack={stack.length > 0 ? stack : ["TypeScript", "Go", "Rust", "Next.js", "Postgres", "Linux"]}
-        />
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-baseline gap-3">
+            <h1 className="text-5xl sm:text-7xl font-bold font-display tracking-tight text-ctp-text">
+              vokiry
+            </h1>
+            <span className="aug-br px-3 py-1 font-mono text-xs sm:text-sm bg-ctp-surface0 border border-ctp-mauve/40 text-ctp-mauve font-semibold">
+              дурной вайбкодер × медианищета
+            </span>
+          </div>
 
-        <div className="flex flex-wrap gap-4 mt-8">
-          <Link href="/portfolio" className="btn-primary inline-flex items-center gap-2 hover-lift">
-            View Work
-            <ArrowRightIcon className="w-4 h-4" />
+          <p className="text-base sm:text-lg text-ctp-subtext0 max-w-3xl leading-relaxed">
+            Пишу код на чистом вайбе, стримлю эксперименты на Twitch, собираю оверлеи и софт из костылей и энтузиазма. 
+            Здесь собраны мои поделки, сетап медианищеты, трансляции и заметки с полей.
+          </p>
+        </div>
+
+        {/* Quick action buttons */}
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <a
+            href="https://twitch.tv/vokiry"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="aug-br inline-flex items-center gap-2 px-4 py-2 font-mono text-xs font-semibold bg-ctp-red text-white hover:opacity-90 transition-opacity cursor-pointer shadow-xs"
+          >
+            <span>▶ Twitch подруб</span>
+          </a>
+          <Link
+            href="/crafts"
+            className="aug-br inline-flex items-center gap-1.5 px-4 py-2 font-mono text-xs font-semibold bg-ctp-surface0 border border-[var(--border)] text-ctp-text hover:border-ctp-mauve hover:text-ctp-mauve transition-all"
+          >
+            <span>[~/костыли]</span>
           </Link>
-          <Link href="/about" className="btn-secondary inline-flex items-center gap-2">
-            About Me
+          <Link
+            href="/hardware"
+            className="aug-br inline-flex items-center gap-1.5 px-4 py-2 font-mono text-xs font-semibold bg-ctp-surface0 border border-[var(--border)] text-ctp-text hover:border-ctp-teal hover:text-ctp-teal transition-all"
+          >
+            <span>[~/железки]</span>
           </Link>
-          <Link href="/blog" className="btn-secondary inline-flex items-center gap-2">
-            Blog
+          <Link
+            href="/wall"
+            className="aug-br inline-flex items-center gap-1.5 px-4 py-2 font-mono text-xs font-semibold bg-ctp-surface0 border border-[var(--border)] text-ctp-text hover:border-ctp-peach hover:text-ctp-peach transition-all"
+          >
+            <span>[~/забор]</span>
           </Link>
         </div>
       </section>
 
-      {/* Featured projects — magazine grid */}
-      {featuredProjects.length > 0 && (
-        <section className="animate-slide-up" style={{ animationDelay: "0.15s" }}>
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <p className="text-[var(--section-accent)] font-mono text-sm mb-1">~/featured</p>
-              <h2 className="text-3xl font-bold">
-                <span className="neon-underline">Selected Work</span>
-              </h2>
-            </div>
-            <Link href="/portfolio" className="text-[var(--section-accent)] hover:underline text-sm font-mono">
-              all projects →
-            </Link>
-          </div>
+      {/* --------------------------------------------------------------------
+          TWITCH BROADCAST FEED WIDGET
+          -------------------------------------------------------------------- */}
+      <section>
+        <LiveStreamWidget />
+      </section>
 
-          <div className="grid md:grid-cols-3 md:grid-rows-2 gap-4 auto-rows-fr">
-            {featuredProjects.map((project, i) => (
-              <Link
-                key={project.slug}
-                href="/portfolio"
-                className={`mag-card p-6 block group ${i === 0 ? "md:col-span-2 md:row-span-2" : ""}`}
-              >
-                <div className="flex items-center gap-2 mb-3 text-xs font-mono text-[var(--text-muted)]">
-                  <span>[{String(i + 1).padStart(2, "0")}]</span>
-                  <span>·</span>
-                  <span>{project.tech[0]}</span>
+      {/* --------------------------------------------------------------------
+          STATION BENTO NAVIGATION GRID
+          -------------------------------------------------------------------- */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)] font-mono text-xs">
+          <span className="text-ctp-subtext0">// КАРТА СТАНЦИИ</span>
+          <span className="text-ctp-overlay0">INDEX [02..07]</span>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {sections.map((sec) => (
+            <Link
+              key={sec.code}
+              href={sec.href}
+              className={`panel-card aug-br p-5 block group ${sec.border} transition-all`}
+            >
+              <div className="flex items-center justify-between mb-3 text-xs font-mono">
+                <span className="text-ctp-overlay0">[{sec.code}]</span>
+                <span className={`${sec.accent} font-semibold group-hover:translate-x-1 transition-transform inline-block`}>
+                  открыть ↗
+                </span>
+              </div>
+              <h2 className="text-lg font-bold font-display text-ctp-text group-hover:text-ctp-mauve transition-colors mb-1">
+                {sec.title}
+              </h2>
+              <div className="text-xs font-mono text-ctp-subtext0 mb-2">
+                {sec.subtitle}
+              </div>
+              <p className="text-xs text-ctp-overlay1 leading-relaxed">
+                {sec.desc}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* --------------------------------------------------------------------
+          FEATURED CRAFTS (ПОДЕЛКИ И КОСТЫЛИ)
+          -------------------------------------------------------------------- */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
+          <div>
+            <span className="text-xs font-mono text-ctp-mauve">// ИЗБРАННЫЕ ПОДЕЛКИ</span>
+            <h2 className="text-2xl font-bold font-display text-ctp-text mt-0.5">
+              Свежие костыли
+            </h2>
+          </div>
+          <Link
+            href="/crafts"
+            className="text-xs font-mono text-ctp-mauve hover:underline"
+          >
+            все костыли →
+          </Link>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-4">
+          {featuredProjects.map((p, i) => (
+            <div
+              key={p.slug || i}
+              className="panel-card aug-br p-5 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs font-mono text-ctp-overlay0 mb-2">
+                  <span>CRAFT #{String(i + 1).padStart(2, "0")}</span>
+                  {p.live && <span className="text-ctp-green font-mono">● LIVE</span>}
                 </div>
-                <h3 className={`font-bold mb-3 group-hover:text-[var(--section-accent)] transition-colors ${i === 0 ? "text-3xl md:text-4xl" : "text-xl"}`}>
-                  <span className="neon-underline">{project.title}</span>
+                <h3 className="text-lg font-bold font-display text-ctp-text mb-2">
+                  {p.title}
                 </h3>
-                <p className={`text-[var(--text-secondary)] ${i === 0 ? "text-base" : "text-sm"} mb-4`}>
-                  {project.description}
+                <p className="text-xs text-ctp-subtext0 mb-4 line-clamp-3 leading-relaxed">
+                  {p.description}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.slice(0, i === 0 ? 6 : 3).map((t) => (
-                    <span key={t} className="px-2 py-0.5 text-xs rounded bg-[var(--bg-card)] text-[var(--text-muted)] font-mono">
+              </div>
+
+              <div className="space-y-3 pt-3 border-t border-[var(--border-subtle)]">
+                <div className="flex flex-wrap gap-1.5">
+                  {p.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="px-2 py-0.5 text-[11px] font-mono bg-ctp-surface1 text-ctp-subtext0"
+                    >
                       {t}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3 pt-1 text-xs font-mono">
+                  {p.github && p.github !== "#" && (
+                    <a
+                      href={p.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-ctp-mauve hover:underline"
+                    >
+                      GitHub ↗
+                    </a>
+                  )}
+                  {p.live && p.live !== "#" && (
+                    <a
+                      href={p.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-ctp-teal hover:underline"
+                    >
+                      Демо ↗
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* --------------------------------------------------------------------
+          RECENT NOTES (ГРАФОМАНИЯ)
+          -------------------------------------------------------------------- */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
+          <div>
+            <span className="text-xs font-mono text-ctp-peach">// БОРТОВОЙ ЖУРНАЛ</span>
+            <h2 className="text-2xl font-bold font-display text-ctp-text mt-0.5">
+              Свежая графомания
+            </h2>
+          </div>
+          <Link
+            href="/notes"
+            className="text-xs font-mono text-ctp-peach hover:underline"
+          >
+            все заметки →
+          </Link>
+        </div>
+
+        {posts.length === 0 ? (
+          <div className="panel-sharp aug-br p-6 font-mono text-xs text-ctp-overlay1">
+            <span>$ ls notes/ — пока пусто. Автор занят стримом или кодит костыли.</span>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {posts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/notes/${post.slug}`}
+                className="panel-sharp aug-br p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group block"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
+                  <span className="font-mono text-xs text-ctp-overlay0 tabular-nums">
+                    {post.date}
+                  </span>
+                  <span className="text-base font-semibold text-ctp-text group-hover:text-ctp-mauve transition-colors">
+                    {post.title}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  {post.tags.slice(0, 2).map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[11px] font-mono text-ctp-subtext0 px-2 py-0.5 bg-ctp-surface0"
+                    >
+                      #{tag}
                     </span>
                   ))}
                 </div>
               </Link>
             ))}
           </div>
-        </section>
-      )}
-
-      {/* Recent posts */}
-      <section className="animate-slide-up" style={{ animationDelay: "0.2s" }}>
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <p className="text-[var(--section-accent)] font-mono text-sm mb-1">~/writes</p>
-            <h2 className="text-3xl font-bold">
-              <span className="neon-underline">Latest Posts</span>
-            </h2>
-          </div>
-          <Link href="/blog" className="text-[var(--section-accent)] hover:underline text-sm font-mono">
-            all posts →
-          </Link>
-        </div>
-
-        {posts.length === 0 ? (
-          <p className="text-[var(--text-muted)] font-mono">$ ls posts/ — empty.</p>
-        ) : (
-          <ul className="prompt-list space-y-3 font-mono">
-            {posts.map((post) => (
-              <li key={post.slug}>
-                <Link href={`/blog/${post.slug}`} className="group flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 py-2 border-b border-[var(--border)] hover:border-[var(--section-accent)] transition-colors">
-                  <time className="text-xs text-[var(--text-muted)] tabular-nums w-24">{post.date}</time>
-                  <span className="text-lg group-hover:text-[var(--section-accent)] transition-colors flex-1">
-                    {post.title}
-                  </span>
-                  <span className="text-xs text-[var(--text-muted)]">
-                    {post.tags.slice(0, 2).join(" · ")}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
         )}
-      </section>
-
-      {/* Quick utilities */}
-      <section className="animate-slide-up" style={{ animationDelay: "0.25s" }}>
-        <p className="text-[var(--section-accent)] font-mono text-sm mb-1">~/tools</p>
-        <h2 className="text-3xl font-bold mb-8">
-          <span className="neon-underline">Devtools</span>
-        </h2>
-        <Link href="/utilities" className="mag-card p-6 block group">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-sm text-[var(--text-muted)]">$ ls utilities/</span>
-            <span className="text-[var(--section-accent)] text-sm font-mono group-hover:translate-x-1 transition-transform inline-block">→</span>
-          </div>
-          <p className="font-mono text-sm text-[var(--text-primary)]">
-            json · base64 · url · hash · color · timestamp · cron · sql
-          </p>
-        </Link>
       </section>
     </div>
   );
