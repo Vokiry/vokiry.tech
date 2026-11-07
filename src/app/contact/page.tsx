@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { getProfile } from "@/lib/profile";
 import { siteConfig } from "@/lib/siteConfig";
 
 export const dynamic = "force-dynamic";
 
 export default function ContactPage() {
-  const { socials, author, twitch } = siteConfig;
+  const profile = getProfile();
+  const socials = { ...siteConfig.socials, ...profile.social };
+  const twitchUrl = profile.social?.twitch || siteConfig.twitch.channelUrl;
 
   const contacts = [
     {
@@ -17,8 +20,8 @@ export default function ContactPage() {
     },
     {
       label: "Twitch",
-      value: `twitch.tv/${twitch.channel}`,
-      href: twitch.channelUrl,
+      value: twitchUrl.replace("https://", ""),
+      href: twitchUrl,
       desc: "Написать в чат прямо во время прямого эфира",
       color: "text-ctp-red",
       hoverBorder: "hover:border-ctp-red",

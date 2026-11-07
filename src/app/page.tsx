@@ -8,9 +8,11 @@ import { LiveStreamWidget } from "@/components/LiveStreamWidget";
 import { LiveTelemetryBar } from "@/components/LiveTelemetryBar";
 import { siteConfig } from "@/lib/siteConfig";
 import { playSound } from "@/lib/sound";
+import { useTwitch } from "@/lib/useTwitch";
 import projectsData from "@/content/projects.json";
 
 export default function Home() {
+  const { status } = useTwitch();
   const featuredProjects = projectsData.filter((p) => p.featured).slice(0, 3);
   const posts = [
     {
@@ -35,7 +37,7 @@ export default function Home() {
       href: "/live",
       title: "~/подруб",
       subtitle: "Twitch стрим и статус",
-      desc: `Эфир на twitch.tv/${siteConfig.twitch.channel}, расписание, клипы, команды чата и донаты.`,
+      desc: `Эфир на twitch.tv/${status.channel}, расписание, клипы, команды чата и донаты.`,
       accent: "text-ctp-red",
       border: "hover:border-ctp-red/50",
       glow: "hover:shadow-[0_0_15px_rgba(243,139,168,0.15)]",
@@ -142,7 +144,7 @@ export default function Home() {
         {/* Quick action buttons */}
         <div className="flex flex-wrap items-center gap-3 pt-2">
           <a
-            href={siteConfig.twitch.channelUrl}
+            href={status.channelUrl}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => playSound("click")}

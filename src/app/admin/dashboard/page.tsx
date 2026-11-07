@@ -43,7 +43,7 @@ interface Profile {
   };
   uses?: { hardware: string[]; software: string[] };
   tails?: { status: string; location: string; tailLength: number; energy: number; napsToday: number; bamboo: number };
-  social: { twitch?: string; github: string; twitter: string; telegram: string; email: string };
+  social: { twitch?: string; github: string; twitter: string; telegram: string; email: string; donate?: string };
 }
 
 type Tab = "posts" | "projects" | "skills" | "profile";
@@ -599,12 +599,21 @@ export default function AdminDashboard() {
                   className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
                 />
               </div>
-              <div className="sm:col-span-2">
+              <div>
                 <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Email</label>
                 <input
                   type="text"
                   value={profile.social?.email || ""}
                   onChange={(e) => setProfile({ ...profile, social: { ...profile.social, email: e.target.value } })}
+                  className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Донаты (DonationAlerts / Boosty)</label>
+                <input
+                  type="text"
+                  value={profile.social?.donate || ""}
+                  onChange={(e) => setProfile({ ...profile, social: { ...profile.social, donate: e.target.value } })}
                   className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
                 />
               </div>

@@ -17,6 +17,8 @@ services:
       - ADMIN_GITHUB_LOGINS=${ADMIN_GITHUB_LOGINS:-vokiry}
     expose:
       - "3000"
+    volumes:
+      - ./src/content:/app/src/content
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000"]
       interval: 30s

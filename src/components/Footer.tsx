@@ -1,8 +1,12 @@
 import Link from "next/link";
+import { getProfile } from "@/lib/profile";
 import { siteConfig } from "@/lib/siteConfig";
 
 export function Footer() {
-  const { author, socials, twitch } = siteConfig;
+  const profile = getProfile();
+  const author = { ...siteConfig.author, ...profile.about };
+  const socials = { ...siteConfig.socials, ...profile.social };
+  const twitchUrl = profile.social?.twitch || siteConfig.twitch.channelUrl;
 
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--bg-secondary)] mt-auto font-mono text-xs text-ctp-subtext0">
@@ -24,7 +28,7 @@ export function Footer() {
           {/* Social links */}
           <div className="flex items-center flex-wrap justify-center gap-4 text-xs">
             <a
-              href={twitch.channelUrl}
+              href={twitchUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-ctp-mauve transition-colors"
@@ -51,12 +55,32 @@ export function Footer() {
                 [telegram]
               </a>
             )}
+            {socials.twitter && (
+              <a
+                href={socials.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-ctp-peach transition-colors"
+              >
+                [twitter]
+              </a>
+            )}
             {socials.email && (
               <a
                 href={`mailto:${socials.email}`}
                 className="hover:text-ctp-peach transition-colors"
               >
                 [email]
+              </a>
+            )}
+            {socials.donate && (
+              <a
+                href={socials.donate}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-ctp-green transition-colors"
+              >
+                [донат]
               </a>
             )}
             <Link

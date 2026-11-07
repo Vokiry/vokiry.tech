@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getAbout, getNowItems, getUses, getTailsStats, getSocial, getProfile, updateProfile } from "@/lib/profile";
 import { isAdmin } from "@/lib/auth";
 
@@ -36,6 +37,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Invalid section" }, { status: 400 });
     }
     const updated = updateProfile({ ...profile, [section]: data });
+    revalidatePath("/", "layout");
     return NextResponse.json(updated);
   } catch {
     return NextResponse.json({ error: "Failed to update section" }, { status: 500 });

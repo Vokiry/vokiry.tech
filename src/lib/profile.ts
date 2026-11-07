@@ -41,6 +41,7 @@ export interface Social {
   twitter: string;
   telegram: string;
   email: string;
+  donate?: string;
 }
 
 export interface About {
@@ -87,6 +88,7 @@ const defaultProfile: Profile = {
     twitter: "https://twitter.com/Vokkiry",
     telegram: "https://t.me/Vokiry",
     email: "vokiiry@gmail.com",
+    donate: "https://www.donationalerts.com/r/vokiry",
   },
 };
 

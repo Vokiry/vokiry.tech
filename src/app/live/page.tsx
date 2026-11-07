@@ -9,12 +9,20 @@ import { useEffect, useState } from "react";
 export default function LivePage() {
   const { status, loading } = useTwitch();
   const [hostname, setHostname] = useState("vokiry.tech");
+  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setHostname(window.location.hostname);
     }
+    fetch("/api/profile")
+      .then((r) => r.json())
+      .then((d) => setProfile(d))
+      .catch(() => {});
   }, []);
+
+  const telegramUrl = profile?.social?.telegram || siteConfig.socials.telegram;
+  const donateUrl = profile?.social?.donate || siteConfig.socials.donate;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
@@ -99,7 +107,7 @@ export default function LivePage() {
                     Перейти на Twitch канал ↗
                   </a>
                   <a
-                    href={siteConfig.socials.telegram}
+                    href={telegramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => playSound("click")}
@@ -181,7 +189,7 @@ export default function LivePage() {
             </div>
             <div className="flex flex-wrap gap-2">
               <a
-                href={siteConfig.socials.donate}
+                href={donateUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound("click")}

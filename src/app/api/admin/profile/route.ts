@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getProfile, updateProfile } from "@/lib/profile";
 import { isAdmin } from "@/lib/auth";
 
@@ -23,6 +24,7 @@ export async function PUT(request: NextRequest) {
   try {
     const updated = updateProfile(await request.json());
     if (!updated) return NextResponse.json({ error: "Failed to update profile" }, { status: 500 });
+    revalidatePath("/", "layout");
     return NextResponse.json(updated);
   } catch {
     return NextResponse.json({ error: "Failed to update profile" }, { status: 500 });

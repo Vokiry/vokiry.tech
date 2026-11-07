@@ -10,6 +10,8 @@ export default function AboutPage() {
     whoAmI: siteConfig.author.bio,
     whatIDo: "Разрабатываю веб-приложения, автоматизирую стримы на Python/OBS WebSocket, пилю скрипты и делюсь графоманией.",
   };
+  const socials = { ...siteConfig.socials, ...profile.social };
+  const twitchUrl = profile.social?.twitch || siteConfig.twitch.channelUrl;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
@@ -64,38 +66,38 @@ export default function AboutPage() {
           </div>
           <div className="grid sm:grid-cols-2 gap-3 font-mono text-xs">
             <a
-              href={siteConfig.twitch.channelUrl}
+              href={twitchUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="p-3 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] hover:border-ctp-red text-ctp-text flex items-center justify-between transition-colors"
             >
               <span>Twitch канал:</span>
-              <span className="text-ctp-red font-semibold">twitch.tv/{siteConfig.twitch.channel} ↗</span>
+              <span className="text-ctp-red font-semibold">{twitchUrl.replace("https://", "")} ↗</span>
             </a>
             <a
-              href={siteConfig.socials.telegram}
+              href={socials.telegram}
               target="_blank"
               rel="noopener noreferrer"
               className="p-3 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] hover:border-ctp-sapphire text-ctp-text flex items-center justify-between transition-colors"
             >
               <span>Telegram:</span>
-              <span className="text-ctp-sapphire font-semibold">{siteConfig.socials.telegram.replace("https://t.me/", "@")} ↗</span>
+              <span className="text-ctp-sapphire font-semibold">{socials.telegram.replace("https://t.me/", "@")} ↗</span>
             </a>
             <a
-              href={siteConfig.socials.github}
+              href={socials.github}
               target="_blank"
               rel="noopener noreferrer"
               className="p-3 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] hover:border-ctp-teal text-ctp-text flex items-center justify-between transition-colors"
             >
               <span>GitHub:</span>
-              <span className="text-ctp-teal font-semibold">{siteConfig.author.name} ↗</span>
+              <span className="text-ctp-teal font-semibold">{socials.github.replace("https://github.com/", "")} ↗</span>
             </a>
             <a
-              href={`mailto:${siteConfig.socials.email}`}
+              href={`mailto:${socials.email}`}
               className="p-3 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] hover:border-ctp-peach text-ctp-text flex items-center justify-between transition-colors"
             >
               <span>Email:</span>
-              <span className="text-ctp-peach font-semibold">{siteConfig.socials.email} ↗</span>
+              <span className="text-ctp-peach font-semibold">{socials.email} ↗</span>
             </a>
           </div>
         </section>
