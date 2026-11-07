@@ -1,12 +1,11 @@
 FROM node:20-alpine AS base
 WORKDIR /app
-ENV NODE_ENV=production
 RUN npm install -g npm@latest
 
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci && npm cache clean --force
+RUN npm ci --include=dev && npm cache clean --force
 
 FROM base AS builder
 WORKDIR /app
