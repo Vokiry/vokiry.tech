@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { playSound } from "@/lib/sound";
 
 const tools = [
   { id: "json", name: "JSON Formatter", code: "01", desc: "Форматирование и валидация JSON" },
@@ -133,15 +135,64 @@ export default function ToolsPage() {
           </div>
 
           <div className="font-mono text-xs text-ctp-overlay1">
-            <span>TOOLS: 8 MODULES // CLIENT_SIDE</span>
+            <span>TOOLS: 10 MODULES // CLIENT_SIDE</span>
           </div>
         </div>
       </section>
 
       {/* --------------------------------------------------------------------
+          FEATURED ADVANCED WORKSHOPS (Mapart & Image Lab)
+          -------------------------------------------------------------------- */}
+      <section className="grid sm:grid-cols-2 gap-4">
+        <Link
+          href="/tools/mapart"
+          onClick={() => playSound("click")}
+          onMouseEnter={() => playSound("hover")}
+          className="panel-card aug-br p-5 block group border-ctp-teal/40 hover:border-ctp-teal hover:shadow-[0_0_15px_rgba(148,226,213,0.15)] transition-all"
+        >
+          <div className="flex items-center justify-between font-mono text-xs mb-2">
+            <span className="text-ctp-teal font-bold">[ FEATURED // MINECRAFT ]</span>
+            <span className="text-ctp-teal group-hover:translate-x-1 transition-transform inline-block">
+              запустить ↗
+            </span>
+          </div>
+          <h2 className="text-xl font-bold font-display text-ctp-text group-hover:text-ctp-teal transition-colors mb-1">
+            MapartCraft Generator
+          </h2>
+          <p className="text-xs text-ctp-subtext0 leading-relaxed">
+            Генерация карт 128×128 для Minecraft из картинок с алгоритмами сглаживания (Floyd-Steinberg, Atkinson, Bayer) и подсчётом блоков по стакам.
+          </p>
+        </Link>
+
+        <Link
+          href="/tools/image"
+          onClick={() => playSound("click")}
+          onMouseEnter={() => playSound("hover")}
+          className="panel-card aug-br p-5 block group border-ctp-peach/40 hover:border-ctp-peach hover:shadow-[0_0_15px_rgba(250,179,135,0.15)] transition-all"
+        >
+          <div className="flex items-center justify-between font-mono text-xs mb-2">
+            <span className="text-ctp-peach font-bold">[ FEATURED // MEDIA LAB ]</span>
+            <span className="text-ctp-peach group-hover:translate-x-1 transition-transform inline-block">
+              запустить ↗
+            </span>
+          </div>
+          <h2 className="text-xl font-bold font-display text-ctp-text group-hover:text-ctp-peach transition-colors mb-1">
+            Image Workshop (Ezgif Style)
+          </h2>
+          <p className="text-xs text-ctp-subtext0 leading-relaxed">
+            Сжатие WebP/AVIF со счётчиком экономии веса, масштабирование, пикселизация 8-бит, палитра Catppuccin и генерация ASCII-арта.
+          </p>
+        </Link>
+      </section>
+
+      {/* --------------------------------------------------------------------
           Tool Selector Grid
           -------------------------------------------------------------------- */}
-      <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <section className="space-y-3">
+        <div className="font-mono text-xs text-ctp-overlay0 pb-1 border-b border-[var(--border-subtle)]">
+          // БЫСТРЫЕ МИКРО-УТИЛИТЫ:
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {tools.map((tool) => (
           <button
             key={tool.id}
@@ -169,6 +220,7 @@ export default function ToolsPage() {
             </div>
           </button>
         ))}
+        </div>
       </section>
 
       {/* --------------------------------------------------------------------

@@ -32,6 +32,36 @@
     "order": 2
   },
   {
+    "slug": "mapart-craft",
+    "title": "Minecraft MapartCraft Generator",
+    "description": "Клиентский генератор мапартов 128x128 для Minecraft: алгоритмы дизеринга (Floyd-Steinberg, Atkinson, Bayer), выбор блоков ваниллы и расчет материалов по стакам.",
+    "tech": [
+      "Canvas API",
+      "TypeScript",
+      "Minecraft Colors",
+      "Dithering"
+    ],
+    "live": "/tools/mapart",
+    "github": "https://github.com/Vokiry/vokiry.tech/tree/main/src/app/tools/mapart",
+    "featured": true,
+    "order": 3
+  },
+  {
+    "slug": "image-lab",
+    "title": "Ezgif-style Image Workshop",
+    "description": "Медиа-лаборатория в браузере: сжатие WebP/AVIF со счётчиком экономии веса, масштабирование, пикселизация 8-бит, палитра Catppuccin и генерация ASCII-арта.",
+    "tech": [
+      "WebP/AVIF",
+      "Pixelate",
+      "ASCII Generator",
+      "Client-side"
+    ],
+    "live": "/tools/image",
+    "github": "https://github.com/Vokiry/vokiry.tech/tree/main/src/app/tools/image",
+    "featured": false,
+    "order": 4
+  },
+  {
     "slug": "alerts-bridge",
     "title": "Stream Alerts & Donation Bridge",
     "description": "Сверхлегкий асинхронный мост событий между DonationAlerts, DonateX, Twitch EventSub и браузерными источниками OBS без сторонних серверов и задержек.",
@@ -43,36 +73,22 @@
     ],
     "live": "",
     "github": "https://github.com/Vokiry/OBS-Templates/tree/main/bridge",
-    "featured": true,
-    "order": 3
+    "featured": false,
+    "order": 5
   },
   {
     "slug": "stream-audio-deck",
-    "title": "Stream SFX Deck & Soundboard",
-    "description": "Минималистичный локальный саундпад для эфиров: воспроизведение сэмплов по горячим клавишам, реакция на команды чата и нормализация громкости.",
+    "title": "Stream SFX Deck & Web Audio",
+    "description": "Процедурный синтезатор звуков UI на базе Web Audio API и локальный саундпад для эфиров: воспроизведение сэмплов по горячим клавишам и реакция на команды чата.",
     "tech": [
       "Web Audio API",
       "JavaScript",
-      "Cyberpunk SFX"
+      "Synthesizer"
     ],
     "live": "",
     "github": "https://github.com/Vokiry",
     "featured": false,
-    "order": 4
-  },
-  {
-    "slug": "dev-toolbox",
-    "title": "Vibe-Coder Workbench",
-    "description": "Набор карманных инструментов разработчика: форматирование JSON, Base64 энкодер/декодер, парсер cron-выражений, конвертер цветов и генератор хешей без рекламы.",
-    "tech": [
-      "TypeScript",
-      "React 19",
-      "Next.js"
-    ],
-    "live": "/tools",
-    "github": "https://github.com/Vokiry/vokiry.tech/tree/main/src/app/tools",
-    "featured": false,
-    "order": 5
+    "order": 6
   },
   {
     "slug": "night-vibe-setup",
@@ -87,6 +103,6 @@
     "live": "/hardware",
     "github": "https://github.com/Vokiry",
     "featured": false,
-    "order": 6
+    "order": 7
   }
 ]
