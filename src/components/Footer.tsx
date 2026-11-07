@@ -27,6 +27,12 @@ export function Footer() {
 
           {/* Social links */}
           <div className="flex items-center flex-wrap justify-center gap-4 text-xs">
+            <Link
+              href="/about"
+              className="text-ctp-mauve hover:underline font-semibold"
+            >
+              [о себе]
+            </Link>
             <a
               href={twitchUrl}
               target="_blank"

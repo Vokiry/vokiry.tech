@@ -9,6 +9,8 @@ cd "$PROJECT_DIR"
 
 echo "=== Creating directories ==="
 mkdir -p nginx/conf.d nginx/ssl certbot/conf certbot/www static
+chown -R 1001:1001 src/content || true
+chmod -R 775 src/content || true
 
 echo "=== Building Next.js ==="
 docker compose build nextjs

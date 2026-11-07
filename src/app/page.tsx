@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { getProjects } from "@/lib/projects";
@@ -13,6 +14,20 @@ import projectsData from "@/content/projects.json";
 
 export default function Home() {
   const { status } = useTwitch();
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/profile")
+      .then((r) => r.json())
+      .then((d) => setProfile(d))
+      .catch(() => {});
+  }, []);
+
+  const twitchUrl = profile?.social?.twitch || status.channelUrl || siteConfig.twitch.channelUrl;
+  const channelName =
+    twitchUrl.replace(/^https?:\/\/(www\.)?twitch\.tv\//i, "").replace(/\/$/, "") ||
+    status.channel;
+
   const featuredProjects = projectsData.filter((p) => p.featured).slice(0, 3);
   const posts = [
     {
@@ -34,16 +49,26 @@ export default function Home() {
   const sections = [
     {
       code: "02",
+      href: "/about",
+      title: "~/кто-я",
+      subtitle: "О себе и манифест",
+      desc: "Кто я такой, чем занимаюсь, принципы вайбкодинга и прямые контакты.",
+      accent: "text-ctp-mauve",
+      border: "hover:border-ctp-mauve/50",
+      glow: "hover:shadow-[0_0_15px_rgba(203,166,247,0.15)]",
+    },
+    {
+      code: "03",
       href: "/live",
       title: "~/подруб",
       subtitle: "Twitch стрим и статус",
-      desc: `Эфир на twitch.tv/${status.channel}, расписание, клипы, команды чата и донаты.`,
+      desc: `Эфир на twitch.tv/${channelName}, расписание, клипы, команды чата и донаты.`,
       accent: "text-ctp-red",
       border: "hover:border-ctp-red/50",
       glow: "hover:shadow-[0_0_15px_rgba(243,139,168,0.15)]",
     },
     {
-      code: "03",
+      code: "04",
       href: "/crafts",
       title: "~/костыли",
       subtitle: "Проекты и вайбкод",
@@ -53,7 +78,7 @@ export default function Home() {
       glow: "hover:shadow-[0_0_15px_rgba(203,166,247,0.15)]",
     },
     {
-      code: "04",
+      code: "05",
       href: "/hardware",
       title: "~/железки",
       subtitle: "Сетап медианищеты",
@@ -63,7 +88,7 @@ export default function Home() {
       glow: "hover:shadow-[0_0_15px_rgba(148,226,213,0.15)]",
     },
     {
-      code: "05",
+      code: "06",
       href: "/notes",
       title: "~/графомания",
       subtitle: "Мысли и заметки",
@@ -73,7 +98,7 @@ export default function Home() {
       glow: "hover:shadow-[0_0_15px_rgba(250,179,135,0.15)]",
     },
     {
-      code: "06",
+      code: "07",
       href: "/wall",
       title: "~/забор",
       subtitle: "Гостевая чат-стена",
@@ -83,11 +108,11 @@ export default function Home() {
       glow: "hover:shadow-[0_0_15px_rgba(116,199,236,0.15)]",
     },
     {
-      code: "07",
+      code: "08",
       href: "/tools",
       title: "~/верстак",
       subtitle: "Микро-утилиты",
-      desc: "Быстрый JSON, Base64, Cron, Color и хеширование без рекламы.",
+      desc: "Быстрый JSON, Base64, Cron, Color, MapartCraft и Image Lab без рекламы.",
       accent: "text-ctp-green",
       border: "hover:border-ctp-green/50",
       glow: "hover:shadow-[0_0_15px_rgba(166,227,161,0.15)]",
@@ -144,7 +169,7 @@ export default function Home() {
         {/* Quick action buttons */}
         <div className="flex flex-wrap items-center gap-3 pt-2">
           <a
-            href={status.channelUrl}
+            href={twitchUrl}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => playSound("click")}
@@ -153,6 +178,14 @@ export default function Home() {
           >
             <span>▶ Twitch подруб</span>
           </a>
+          <Link
+            href="/about"
+            onClick={() => playSound("click")}
+            onMouseEnter={() => playSound("hover")}
+            className="aug-br inline-flex items-center gap-1.5 px-4 py-2.5 font-mono text-xs font-semibold bg-ctp-surface0 border border-ctp-mauve/60 text-ctp-mauve hover:bg-ctp-mauve/15 transition-all"
+          >
+            <span>[~/кто-я]</span>
+          </Link>
           <Link
             href="/crafts"
             onClick={() => playSound("click")}
