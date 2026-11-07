@@ -35,9 +35,15 @@ interface Profile {
     whatIDo: string;
   };
   now: { item: string; description: string }[];
-  uses: { hardware: string[]; software: string[] };
-  tails: { status: string; location: string; tailLength: number; energy: number; napsToday: number; bamboo: number };
-  social: { github: string; twitter: string; telegram: string; email: string };
+  hardware?: {
+    computer: { name: string; spec: string; note: string }[];
+    peripherals: { name: string; spec: string; note: string }[];
+    streaming: { name: string; spec: string; note: string }[];
+    software: { name: string; spec: string; note: string }[];
+  };
+  uses?: { hardware: string[]; software: string[] };
+  tails?: { status: string; location: string; tailLength: number; energy: number; napsToday: number; bamboo: number };
+  social: { twitch?: string; github: string; twitter: string; telegram: string; email: string };
 }
 
 type Tab = "posts" | "projects" | "skills" | "profile";
@@ -525,115 +531,210 @@ export default function AdminDashboard() {
 
       {activeTab === "profile" && profile && (
         <div className="space-y-6">
-          <div className="glass-card p-6">
-            <h2 className="text-xl font-semibold mb-4">About Section</h2>
+          <div className="panel-card aug-br p-6 space-y-4">
+            <h2 className="text-base font-bold font-display text-ctp-text">About Section</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm mb-1 text-[var(--text-secondary)]">Who I Am</label>
-                <textarea value={profile.about.whoAmI} onChange={(e) => setProfile({...profile, about: {...profile.about, whoAmI: e.target.value}})}
-                  className="w-full h-24 p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Who I Am</label>
+                <textarea
+                  value={profile.about?.whoAmI || ""}
+                  onChange={(e) => setProfile({ ...profile, about: { ...profile.about, whoAmI: e.target.value } })}
+                  className="w-full h-24 p-2.5 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
               </div>
               <div>
-                <label className="block text-sm mb-1 text-[var(--text-secondary)]">What I Do</label>
-                <textarea value={profile.about.whatIDo} onChange={(e) => setProfile({...profile, about: {...profile.about, whatIDo: e.target.value}})}
-                  className="w-full h-24 p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">What I Do</label>
+                <textarea
+                  value={profile.about?.whatIDo || ""}
+                  onChange={(e) => setProfile({ ...profile, about: { ...profile.about, whatIDo: e.target.value } })}
+                  className="w-full h-24 p-2.5 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
               </div>
-              <button onClick={() => handleUpdateProfile("about", profile.about)} disabled={saving} className="px-4 py-2 rounded bg-[var(--primary)] text-[var(--bg-primary)] disabled:opacity-50">
-                {saving ? "Saving..." : "Save"}
+              <button
+                onClick={() => handleUpdateProfile("about", profile.about)}
+                disabled={saving}
+                className="px-4 py-2 aug-br bg-ctp-mauve text-ctp-base font-mono text-xs font-semibold hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
+              >
+                {saving ? "Saving..." : "Save About"}
               </button>
             </div>
           </div>
 
-          <div className="glass-card p-6">
-            <h2 className="text-xl font-semibold mb-4">Social Links</h2>
-            <div className="space-y-4">
+          <div className="panel-card aug-br p-6 space-y-4">
+            <h2 className="text-base font-bold font-display text-ctp-text">Social &amp; Broadcast Links</h2>
+            <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm mb-1 text-[var(--text-secondary)]">GitHub</label>
-                <input type="text" value={profile.social.github} onChange={(e) => setProfile({...profile, social: {...profile.social, github: e.target.value}})}
-                  className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Twitch Channel</label>
+                <input
+                  type="text"
+                  value={profile.social?.twitch || ""}
+                  onChange={(e) => setProfile({ ...profile, social: { ...profile.social, twitch: e.target.value } })}
+                  className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
               </div>
               <div>
-                <label className="block text-sm mb-1 text-[var(--text-secondary)]">Twitter</label>
-                <input type="text" value={profile.social.twitter} onChange={(e) => setProfile({...profile, social: {...profile.social, twitter: e.target.value}})}
-                  className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">GitHub Profile</label>
+                <input
+                  type="text"
+                  value={profile.social?.github || ""}
+                  onChange={(e) => setProfile({ ...profile, social: { ...profile.social, github: e.target.value } })}
+                  className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
               </div>
               <div>
-                <label className="block text-sm mb-1 text-[var(--text-secondary)]">Telegram</label>
-                <input type="text" value={profile.social.telegram} onChange={(e) => setProfile({...profile, social: {...profile.social, telegram: e.target.value}})}
-                  className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Telegram</label>
+                <input
+                  type="text"
+                  value={profile.social?.telegram || ""}
+                  onChange={(e) => setProfile({ ...profile, social: { ...profile.social, telegram: e.target.value } })}
+                  className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
               </div>
               <div>
-                <label className="block text-sm mb-1 text-[var(--text-secondary)]">Email</label>
-                <input type="text" value={profile.social.email} onChange={(e) => setProfile({...profile, social: {...profile.social, email: e.target.value}})}
-                  className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Twitter / X</label>
+                <input
+                  type="text"
+                  value={profile.social?.twitter || ""}
+                  onChange={(e) => setProfile({ ...profile, social: { ...profile.social, twitter: e.target.value } })}
+                  className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
               </div>
-              <button onClick={() => handleUpdateProfile("social", profile.social)} disabled={saving} className="px-4 py-2 rounded bg-[var(--primary)] text-[var(--bg-primary)] disabled:opacity-50">
-                {saving ? "Saving..." : "Save"}
-              </button>
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Email</label>
+                <input
+                  type="text"
+                  value={profile.social?.email || ""}
+                  onChange={(e) => setProfile({ ...profile, social: { ...profile.social, email: e.target.value } })}
+                  className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
+              </div>
             </div>
+            <button
+              onClick={() => handleUpdateProfile("social", profile.social)}
+              disabled={saving}
+              className="px-4 py-2 aug-br bg-ctp-mauve text-ctp-base font-mono text-xs font-semibold hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
+            >
+              {saving ? "Saving..." : "Save Links"}
+            </button>
           </div>
 
-          <div className="glass-card p-6">
-            <h2 className="text-xl font-semibold mb-4">Uses - Hardware</h2>
-            <div className="space-y-4">
-              <textarea value={profile.uses.hardware.join("\n")} onChange={(e) => setProfile({...profile, uses: {...profile.uses, hardware: e.target.value.split("\n").filter(Boolean)}})}
-                className="w-full h-32 p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)] font-mono text-sm" placeholder="One item per line"></textarea>
-              <button onClick={() => handleUpdateProfile("uses", profile.uses)} disabled={saving} className="px-4 py-2 rounded bg-[var(--primary)] text-[var(--bg-primary)] disabled:opacity-50">
-                {saving ? "Saving..." : "Save"}
-              </button>
+          <div className="panel-card aug-br p-6 space-y-4">
+            <h2 className="text-base font-bold font-display text-ctp-text">Uses &amp; Setup (Legacy List)</h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Hardware (One per line)</label>
+                <textarea
+                  value={(profile.uses?.hardware || []).join("\n")}
+                  onChange={(e) =>
+                    setProfile({
+                      ...profile,
+                      uses: {
+                        ...(profile.uses || { hardware: [], software: [] }),
+                        hardware: e.target.value.split("\n").filter(Boolean),
+                      },
+                    })
+                  }
+                  className="w-full h-32 p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                  placeholder="One item per line"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Software (One per line)</label>
+                <textarea
+                  value={(profile.uses?.software || []).join("\n")}
+                  onChange={(e) =>
+                    setProfile({
+                      ...profile,
+                      uses: {
+                        ...(profile.uses || { hardware: [], software: [] }),
+                        software: e.target.value.split("\n").filter(Boolean),
+                      },
+                    })
+                  }
+                  className="w-full h-32 p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                  placeholder="One item per line"
+                />
+              </div>
             </div>
+            <button
+              onClick={() => handleUpdateProfile("uses", profile.uses || { hardware: [], software: [] })}
+              disabled={saving}
+              className="px-4 py-2 aug-br bg-ctp-mauve text-ctp-base font-mono text-xs font-semibold hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
+            >
+              {saving ? "Saving..." : "Save Uses"}
+            </button>
           </div>
 
-          <div className="glass-card p-6">
-            <h2 className="text-xl font-semibold mb-4">Uses - Software</h2>
-            <div className="space-y-4">
-              <textarea value={profile.uses.software.join("\n")} onChange={(e) => setProfile({...profile, uses: {...profile.uses, software: e.target.value.split("\n").filter(Boolean)}})}
-                className="w-full h-32 p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)] font-mono text-sm" placeholder="One item per line"></textarea>
-              <button onClick={() => handleUpdateProfile("uses", profile.uses)} disabled={saving} className="px-4 py-2 rounded bg-[var(--primary)] text-[var(--bg-primary)] disabled:opacity-50">
-                {saving ? "Saving..." : "Save"}
-              </button>
-            </div>
-          </div>
-
-          <div className="glass-card p-6">
-            <h2 className="text-xl font-semibold mb-4">Tails Stats</h2>
-            <div className="space-y-4">
+          <div className="panel-card aug-br p-6 space-y-4">
+            <h2 className="text-base font-bold font-display text-ctp-text">Tails Easter Egg Stats</h2>
+            <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm mb-1 text-[var(--text-secondary)]">Status</label>
-                <input type="text" value={profile.tails.status} onChange={(e) => setProfile({...profile, tails: {...profile.tails, status: e.target.value}})}
-                  className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Status</label>
+                <input
+                  type="text"
+                  value={profile.tails?.status || "fluffy"}
+                  onChange={(e) =>
+                    setProfile({
+                      ...profile,
+                      tails: { ...(profile.tails || { status: "fluffy", location: "", tailLength: 50, energy: 50, napsToday: 0, bamboo: 0 }), status: e.target.value },
+                    })
+                  }
+                  className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
               </div>
               <div>
-                <label className="block text-sm mb-1 text-[var(--text-secondary)]">Location</label>
-                <input type="text" value={profile.tails.location} onChange={(e) => setProfile({...profile, tails: {...profile.tails, location: e.target.value}})}
-                  className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Location</label>
+                <input
+                  type="text"
+                  value={profile.tails?.location || "somewhere warm"}
+                  onChange={(e) =>
+                    setProfile({
+                      ...profile,
+                      tails: { ...(profile.tails || { status: "fluffy", location: "", tailLength: 50, energy: 50, napsToday: 0, bamboo: 0 }), location: e.target.value },
+                    })
+                  }
+                  className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs focus:border-ctp-mauve focus:outline-none"
+                />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:col-span-2">
                 <div>
-                  <label className="block text-sm mb-1 text-[var(--text-secondary)]">Tail Length %</label>
-                  <input type="number" value={profile.tails.tailLength} onChange={(e) => setProfile({...profile, tails: {...profile.tails, tailLength: parseInt(e.target.value) || 0}})}
-                    className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                  <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Tail Length %</label>
+                  <input
+                    type="number"
+                    value={profile.tails?.tailLength ?? 50}
+                    onChange={(e) =>
+                      setProfile({
+                        ...profile,
+                        tails: { ...(profile.tails || { status: "fluffy", location: "", tailLength: 50, energy: 50, napsToday: 0, bamboo: 0 }), tailLength: parseInt(e.target.value) || 0 },
+                      })
+                    }
+                    className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs"
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm mb-1 text-[var(--text-secondary)]">Energy %</label>
-                  <input type="number" value={profile.tails.energy} onChange={(e) => setProfile({...profile, tails: {...profile.tails, energy: parseInt(e.target.value) || 0}})}
-                    className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
-                </div>
-                <div>
-                  <label className="block text-sm mb-1 text-[var(--text-secondary)]">Naps Today</label>
-                  <input type="number" value={profile.tails.napsToday} onChange={(e) => setProfile({...profile, tails: {...profile.tails, napsToday: parseInt(e.target.value) || 0}})}
-                    className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
-                </div>
-                <div>
-                  <label className="block text-sm mb-1 text-[var(--text-secondary)]">Bamboo (sticks eaten)</label>
-                  <input type="number" value={profile.tails.bamboo} onChange={(e) => setProfile({...profile, tails: {...profile.tails, bamboo: parseInt(e.target.value) || 0}})}
-                    className="w-full p-2 rounded bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-primary)]" />
+                  <label className="block text-xs font-mono mb-1 text-ctp-subtext0">Energy %</label>
+                  <input
+                    type="number"
+                    value={profile.tails?.energy ?? 50}
+                    onChange={(e) =>
+                      setProfile({
+                        ...profile,
+                        tails: { ...(profile.tails || { status: "fluffy", location: "", tailLength: 50, energy: 50, napsToday: 0, bamboo: 0 }), energy: parseInt(e.target.value) || 0 },
+                      })
+                    }
+                    className="w-full p-2 aug-br bg-[var(--bg-secondary)] border border-[var(--border)] text-ctp-text font-mono text-xs"
+                  />
                 </div>
               </div>
-              <button onClick={() => handleUpdateProfile("tails", profile.tails)} disabled={saving} className="px-4 py-2 rounded bg-[var(--primary)] text-[var(--bg-primary)] disabled:opacity-50">
-                {saving ? "Saving..." : "Save"}
-              </button>
             </div>
+            <button
+              onClick={() => handleUpdateProfile("tails", profile.tails)}
+              disabled={saving}
+              className="px-4 py-2 aug-br bg-ctp-mauve text-ctp-base font-mono text-xs font-semibold hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
+            >
+              {saving ? "Saving..." : "Save Tails"}
+            </button>
           </div>
         </div>
       )}

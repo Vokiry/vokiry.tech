@@ -37,6 +37,28 @@
       { "name": "Цветовая схема", "spec": "Catppuccin Mocha (Dark) / Latte (Light)", "note": "Глаза отдыхают даже в 4 утра" }
     ]
   },
+  "uses": {
+    "hardware": [
+      "AMD Ryzen / 32GB RAM / NVMe SSD",
+      "MacBook Pro M3",
+      "Keychron K2 Mechanical Keyboard",
+      "Конденсаторный USB микрофон + пантограф"
+    ],
+    "software": [
+      "Kitty Terminal",
+      "Fish shell + Starship",
+      "OBS Studio + WebSocket",
+      "Neovim / Cursor"
+    ]
+  },
+  "tails": {
+    "status": "fluffy",
+    "location": "somewhere warm",
+    "tailLength": 85,
+    "energy": 65,
+    "napsToday": 3,
+    "bamboo": 12
+  },
   "social": {
     "twitch": "https://twitch.tv/vokiry",
     "github": "https://github.com/Vokiry",

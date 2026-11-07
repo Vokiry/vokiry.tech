@@ -51,94 +51,99 @@ export interface About {
 export interface Profile {
   about: About;
   now: NowItem[];
-  hardware?: HardwareCategories;
-  uses?: Uses;
-  tails?: TailsStats;
+  hardware: HardwareCategories;
+  uses: Uses;
+  tails: TailsStats;
   social: Social;
 }
 
-export function getProfile(): Profile | null {
-  if (!fs.existsSync(profilePath)) {
-    return null;
-  }
-  try {
-    const data = fs.readFileSync(profilePath, "utf8");
-    return JSON.parse(data);
-  } catch {
-    return null;
-  }
-}
-
-export function updateProfile(data: Partial<Profile>): Profile | null {
-  const current = getProfile();
-  if (!current) {
-    return null;
-  }
-
-  const updated = { ...current, ...data };
-  fs.writeFileSync(profilePath, JSON.stringify(updated, null, 2), "utf8");
-
-  return updated;
-}
-
-export function getAbout(): About {
-  const profile = getProfile();
-  return profile?.about || {
-    whoAmI: "",
-    whatIDo: "",
-  };
-}
-
-export function getNowItems(): NowItem[] {
-  const profile = getProfile();
-  return profile?.now || [];
-}
-
-export function getHardware(): HardwareCategories {
-  const profile = getProfile();
-  return profile?.hardware || {
+const defaultProfile: Profile = {
+  about: {
+    whoAmI: "Дурной вайбкодер и микростример (медианищета).",
+    whatIDo: "Пишу код на чистом вайбе, стримлю эксперименты на Twitch.",
+  },
+  now: [],
+  hardware: {
     computer: [],
     peripherals: [],
     streaming: [],
     software: [],
+  },
+  uses: {
+    hardware: [],
+    software: [],
+  },
+  tails: {
+    status: "fluffy",
+    location: "somewhere warm",
+    tailLength: 85,
+    energy: 65,
+    napsToday: 3,
+    bamboo: 12,
+  },
+  social: {
+    twitch: "https://twitch.tv/vokiry",
+    github: "https://github.com/Vokiry",
+    twitter: "https://twitter.com/Vokkiry",
+    telegram: "https://t.me/Vokiry",
+    email: "vokiiry@gmail.com",
+  },
+};
+
+export function getProfile(): Profile {
+  if (!fs.existsSync(profilePath)) {
+    return defaultProfile;
+  }
+  try {
+    const data = JSON.parse(fs.readFileSync(profilePath, "utf8"));
+    return {
+      about: data.about || defaultProfile.about,
+      now: data.now || defaultProfile.now,
+      hardware: data.hardware || defaultProfile.hardware,
+      uses: data.uses || defaultProfile.uses,
+      tails: data.tails || defaultProfile.tails,
+      social: data.social || defaultProfile.social,
+    };
+  } catch {
+    return defaultProfile;
+  }
+}
+
+export function updateProfile(data: Partial<Profile>): Profile {
+  const current = getProfile();
+  const updated: Profile = {
+    about: data.about ? { ...current.about, ...data.about } : current.about,
+    now: data.now || current.now,
+    hardware: data.hardware || current.hardware,
+    uses: data.uses || current.uses,
+    tails: data.tails ? { ...current.tails, ...data.tails } : current.tails,
+    social: data.social ? { ...current.social, ...data.social } : current.social,
   };
+
+  fs.writeFileSync(profilePath, JSON.stringify(updated, null, 2), "utf8");
+  return updated;
+}
+
+export function getAbout(): About {
+  return getProfile().about;
+}
+
+export function getNowItems(): NowItem[] {
+  return getProfile().now;
+}
+
+export function getHardware(): HardwareCategories {
+  return getProfile().hardware;
 }
 
 export function getUses(): Uses {
-  const profile = getProfile();
-  if (profile?.uses) return profile.uses;
-  if (profile?.hardware) {
-    return {
-      hardware: [
-        ...profile.hardware.computer.map((c) => `${c.name}: ${c.spec}`),
-        ...profile.hardware.peripherals.map((c) => `${c.name}: ${c.spec}`),
-        ...profile.hardware.streaming.map((c) => `${c.name}: ${c.spec}`),
-      ],
-      software: profile.hardware.software.map((s) => `${s.name}: ${s.spec}`),
-    };
-  }
-  return { hardware: [], software: [] };
+  return getProfile().uses;
 }
 
 export function getTailsStats(): TailsStats {
-  const profile = getProfile();
-  return profile?.tails || {
-    status: "fluffy",
-    location: "somewhere warm",
-    tailLength: 50,
-    energy: 50,
-    napsToday: 50,
-    bamboo: 50
-  };
+  return getProfile().tails;
 }
 
 export function getSocial(): Social {
-  const profile = getProfile();
-  return profile?.social || {
-    twitch: "https://twitch.tv/vokiry",
-    github: "",
-    twitter: "",
-    telegram: "",
-    email: ""
-  };
+  return getProfile().social;
 }
