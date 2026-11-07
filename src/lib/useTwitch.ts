@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import type { TwitchStreamInfo } from "./twitch";
+import { siteConfig } from "./siteConfig";
 
 const defaultStatus: TwitchStreamInfo = {
   isLive: false,
-  channel: "vokiry",
-  channelUrl: "https://twitch.tv/vokiry",
+  channel: siteConfig.twitch.channel,
+  channelUrl: siteConfig.twitch.channelUrl,
   title: "Вайбкодинг костылей и эксперименты",
   gameName: "Software and Game Development",
   viewerCount: 0,
@@ -27,14 +28,13 @@ export function useTwitch() {
           if (mounted) setStatus(data);
         }
       } catch {
-        // use default fallback
+        // use fallback
       } finally {
         if (mounted) setLoading(false);
       }
     }
 
     checkStatus();
-    // Poll every 60 seconds
     const interval = setInterval(checkStatus, 60_000);
     return () => {
       mounted = false;

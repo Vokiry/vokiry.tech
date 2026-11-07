@@ -1,50 +1,60 @@
 import Link from "next/link";
+import { siteConfig } from "@/lib/siteConfig";
 
 export default function NotFound() {
   return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4">
-      <div className="max-w-2xl w-full">
-        <div className="code-block mb-6">
-          <div className="flex items-center gap-2 mb-3 text-[var(--text-muted)] text-sm">
-            <span className="w-2 h-2 rounded-full bg-red-500"></span>
-            <span>vokiry@terminal</span>
+    <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
+      <div className="max-w-xl w-full panel-sharp aug-br p-6 sm:p-8 space-y-6 bg-[var(--bg-secondary)] border border-[var(--border)]">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)] font-mono text-xs">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-ctp-red animate-ping" />
+            <span className="text-ctp-red font-bold">[ 404 // SIGNAL_LOST ]</span>
           </div>
-          <div className="font-mono text-sm">
-            <p className="text-red-400 mb-2">Error: 404 - Command not found</p>
-            <p className="text-[var(--text-muted)]">The page you're looking for doesn't exist.</p>
-            <p className="text-[var(--text-muted)] mt-2">Did you mean:</p>
-            <ul className="list-disc list-inside text-[var(--primary)] mt-2 space-y-1">
-              <li><Link href="/" className="hover:underline">/home</Link></li>
-              <li><Link href="/about" className="hover:underline">/about</Link></li>
-              <li><Link href="/blog" className="hover:underline">/blog</Link></li>
-              <li><Link href="/utilities" className="hover:underline">/utilities</Link></li>
-            </ul>
+          <span className="text-ctp-overlay0">{siteConfig.stationId}</span>
+        </div>
+
+        {/* Message */}
+        <div className="space-y-3 font-mono">
+          <h1 className="text-2xl sm:text-3xl font-bold font-display text-ctp-text">
+            Маршрут не найден в эфире
+          </h1>
+          <p className="text-xs sm:text-sm text-ctp-subtext0 leading-relaxed">
+            Запрошенный сектор отсутствует на сервере. Возможно, файл переименован во время 
+            ночного вайбкодинга или ссылка устарела.
+          </p>
+        </div>
+
+        {/* Suggested routes */}
+        <div className="p-4 bg-ctp-surface0 border border-[var(--border-subtle)] aug-br space-y-2 font-mono text-xs">
+          <div className="text-ctp-overlay1">// ДОСТУПНЫЕ СЕКТОРЫ СТАНЦИИ:</div>
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            {siteConfig.navigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-ctp-mauve hover:underline"
+              >
+                [{item.code}] {item.label}
+              </Link>
+            ))}
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4 justify-center">
+        {/* Actions */}
+        <div className="pt-2 flex flex-wrap gap-3">
           <Link
             href="/"
-            className="px-4 py-2 rounded-md bg-[var(--primary)] text-[var(--bg-primary)] font-medium hover:bg-[var(--primary-dark)] transition-all hover:scale-105"
+            className="aug-br px-5 py-2 font-mono text-xs font-semibold bg-ctp-mauve text-ctp-base hover:opacity-90 transition-opacity"
           >
-            Go Home
+            ← Вернуться на базу
           </Link>
           <Link
-            href="/blog"
-            className="px-4 py-2 rounded-md border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--primary)] hover:text-[var(--primary)] transition-all"
+            href="/live"
+            className="aug-br px-4 py-2 font-mono text-xs font-semibold border border-[var(--border)] text-ctp-subtext0 hover:border-ctp-red hover:text-ctp-red transition-colors"
           >
-            Blog
+            Проверить подруб ↗
           </Link>
-          <Link
-            href="/utilities"
-            className="px-4 py-2 rounded-md border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--primary)] hover:text-[var(--primary)] transition-all"
-          >
-            Utilities
-          </Link>
-        </div>
-
-        <div className="mt-8 text-center text-[var(--text-muted)] text-sm">
-          <p>Or try searching for a command...</p>
         </div>
       </div>
     </div>

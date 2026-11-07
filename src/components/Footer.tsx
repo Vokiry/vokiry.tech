@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { getProfile } from "@/lib/profile";
+import { siteConfig } from "@/lib/siteConfig";
 
 export function Footer() {
-  const profile = getProfile();
-  const social = profile?.social;
+  const { author, socials, twitch } = siteConfig;
 
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--bg-secondary)] mt-auto font-mono text-xs text-ctp-subtext0">
@@ -15,26 +14,26 @@ export function Footer() {
           {/* Station identifier */}
           <div className="flex items-center gap-3">
             <span className="text-ctp-mauve font-bold">&gt;_</span>
-            <span className="text-ctp-text font-semibold">vokiry.tech</span>
+            <span className="text-ctp-text font-semibold">{author.name}.tech</span>
             <span className="text-ctp-overlay0 hidden sm:inline">//</span>
             <span className="text-ctp-overlay1 hidden sm:inline">
-              вайбкод &bull; стримы &bull; медианищета
+              {author.role}
             </span>
           </div>
 
           {/* Social links */}
           <div className="flex items-center flex-wrap justify-center gap-4 text-xs">
             <a
-              href="https://twitch.tv/vokiry"
+              href={twitch.channelUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-ctp-mauve transition-colors"
             >
               [twitch]
             </a>
-            {social?.github && (
+            {socials.github && (
               <a
-                href={social.github}
+                href={socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-ctp-teal transition-colors"
@@ -42,9 +41,9 @@ export function Footer() {
                 [github]
               </a>
             )}
-            {social?.telegram && (
+            {socials.telegram && (
               <a
-                href={social.telegram}
+                href={socials.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-ctp-sapphire transition-colors"
@@ -52,9 +51,9 @@ export function Footer() {
                 [telegram]
               </a>
             )}
-            {social?.email && (
+            {socials.email && (
               <a
-                href={`mailto:${social.email}`}
+                href={`mailto:${socials.email}`}
                 className="hover:text-ctp-peach transition-colors"
               >
                 [email]

@@ -4,6 +4,8 @@ import "./globals.css";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { SectionProvider } from "@/components/SectionContext";
+import { StationRadarWatermark } from "@/components/StationRadarWatermark";
+import { siteConfig } from "@/lib/siteConfig";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
@@ -23,13 +25,25 @@ const ibmPlexSans = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "vokiry.tech // станция",
-  description: "Дурной вайбкодер × Медианищета // Личная станция и лаборатория",
-  keywords: ["vokiry", "вайбкод", "стримы", "медианищета", "костыли", "twitch", "разработка"],
-  authors: [{ name: "vokiry" }],
+  title: siteConfig.author.title,
+  description: `${siteConfig.author.role} // Личная станция и лаборатория`,
+  keywords: [
+    siteConfig.author.name,
+    "вайбкод",
+    "стримы",
+    "медианищета",
+    "костыли",
+    "twitch",
+    "tui",
+    "system24",
+  ],
+  authors: [{ name: siteConfig.author.name }],
+  metadataBase: new URL(siteConfig.siteUrl),
   openGraph: {
-    title: "vokiry.tech // станция",
-    description: "Дурной вайбкодер × Медианищета",
+    title: siteConfig.author.title,
+    description: `${siteConfig.author.role} // Личная станция`,
+    url: siteConfig.siteUrl,
+    siteName: siteConfig.author.title,
     type: "website",
     locale: "ru_RU",
   },
@@ -45,7 +59,8 @@ export default function RootLayout({
       lang="ru"
       className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} ${ibmPlexSans.variable} font-sans`}
     >
-      <body className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] bg-tactical-grid">
+      <body className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] bg-tactical-grid relative">
+        <StationRadarWatermark />
         <SectionProvider>
           <Navigation />
           <main className="flex-1 w-full relative z-[1]">

@@ -1,3 +1,5 @@
+import { siteConfig } from "./siteConfig";
+
 export interface TwitchStreamInfo {
   isLive: boolean;
   channel: string;
@@ -7,8 +9,6 @@ export interface TwitchStreamInfo {
   viewerCount: number;
   startedAt: string | null;
 }
-
-const DEFAULT_CHANNEL = "vokiry";
 
 let cachedToken: { token: string; expiresAt: number } | null = null;
 
@@ -41,7 +41,9 @@ async function getTwitchAppToken(clientId: string, clientSecret: string): Promis
   }
 }
 
-export async function getTwitchStatus(channel: string = DEFAULT_CHANNEL): Promise<TwitchStreamInfo> {
+export async function getTwitchStatus(
+  channel: string = siteConfig.twitch.channel
+): Promise<TwitchStreamInfo> {
   const fallback: TwitchStreamInfo = {
     isLive: false,
     channel,
@@ -52,12 +54,11 @@ export async function getTwitchStatus(channel: string = DEFAULT_CHANNEL): Promis
     startedAt: null,
   };
 
-  // Optional local mock for testing live state: NEXT_PUBLIC_TWITCH_MOCK_LIVE="true"
-  if (process.env.NEXT_PUBLIC_TWITCH_MOCK_LIVE === "true") {
+  if (siteConfig.twitch.mockLive) {
     return {
       ...fallback,
       isLive: true,
-      title: "Пилим редизайн vokiry.tech на стриме // Вайбкод и костыли",
+      title: `Пилим редизайн ${siteConfig.author.name}.tech на стриме // Вайбкод и костыли`,
       gameName: "Software and Game Development",
       viewerCount: 42,
       startedAt: new Date().toISOString(),

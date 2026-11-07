@@ -1,12 +1,14 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
+import { siteConfig } from "./siteConfig";
 
-const ALLOWED_GITHUB_LOGINS = (process.env.ADMIN_GITHUB_LOGINS || "vokiry")
+const ALLOWED_GITHUB_LOGINS = (process.env.ADMIN_GITHUB_LOGINS || siteConfig.author.name)
   .split(",")
   .map((s) => s.trim().toLowerCase())
   .filter(Boolean);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: process.env.AUTH_SECRET || "development-station-secret-vokiry-v030",
   providers: [
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID,

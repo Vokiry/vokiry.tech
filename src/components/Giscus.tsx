@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { siteConfig } from "@/lib/siteConfig";
 
 interface GiscusProps {
   repo?: string;
@@ -10,15 +11,16 @@ interface GiscusProps {
 }
 
 export function Giscus({ 
-  repo = "vokiry/vokiry.tech", 
-  repoId = "R_placeholder",
-  category = "Blog Comments", 
-  categoryId = "DIC_placeholder" 
+  repo = siteConfig.giscus.repo, 
+  repoId = siteConfig.giscus.repoId,
+  category = siteConfig.giscus.category, 
+  categoryId = siteConfig.giscus.categoryId 
 }: GiscusProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
+    if (!repoId || !categoryId) return; // Don't load if unconfigured
 
     const script = document.createElement("script");
     script.src = "https://giscus.app/client.js";
@@ -32,7 +34,7 @@ export function Giscus({
     script.setAttribute("data-emit-metadata", "0");
     script.setAttribute("data-input-position", "top");
     script.setAttribute("data-theme", "dark");
-    script.setAttribute("data-lang", "en");
+    script.setAttribute("data-lang", "ru");
     script.setAttribute("crossorigin", "anonymous");
     script.async = true;
 
@@ -46,20 +48,19 @@ export function Giscus({
   }, [repo, repoId, category, categoryId]);
 
   return (
-    <div className="mt-12 pt-8 border-t border-[var(--border)]">
-      <h3 className="text-lg font-semibold mb-4">Comments</h3>
-      <div ref={ref} className="min-h-[200px]" />
-      <p className="text-sm text-[var(--text-muted)] mt-4">
-        Powered by{" "}
-        <a 
-          href="https://giscus.app" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-[var(--primary)] hover:underline"
-        >
-          giscus
-        </a>
-      </p>
+    <div className="space-y-4 font-mono text-xs">
+      <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)]">
+        <span className="text-ctp-mauve font-bold">// ОБСУЖДЕНИЕ</span>
+        <span className="text-ctp-overlay0">[GISCUS]</span>
+      </div>
+      
+      {!repoId ? (
+        <div className="panel-sharp aug-br p-4 text-ctp-overlay1 text-xs">
+          [ Комментарии отключены или ожидают заполнения NEXT_PUBLIC_GISCUS_REPO_ID в .env ]
+        </div>
+      ) : (
+        <div ref={ref} className="min-h-[160px]" />
+      )}
     </div>
   );
 }

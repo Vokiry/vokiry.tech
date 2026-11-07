@@ -4,27 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
+import { SoundToggle } from "./SoundToggle";
 import { useTwitch } from "@/lib/useTwitch";
+import { siteConfig, type NavItem } from "@/lib/siteConfig";
 import { MenuIcon } from "./icons/MenuIcon";
 import { XIcon } from "./icons/XIcon";
-
-interface NavItem {
-  href: string;
-  aliases?: string[];
-  label: string;
-  code: string;
-  desc: string;
-}
-
-const navItems: NavItem[] = [
-  { href: "/", label: "~/база", code: "01", desc: "Главный командный пункт" },
-  { href: "/live", aliases: ["/tails"], label: "~/подруб", code: "02", desc: "Twitch стрим и статус" },
-  { href: "/crafts", aliases: ["/portfolio"], label: "~/костыли", code: "03", desc: "Проекты, скрипты и вайбкод" },
-  { href: "/hardware", aliases: ["/uses"], label: "~/железки", code: "04", desc: "Сетап и софт медианищеты" },
-  { href: "/notes", aliases: ["/blog"], label: "~/графомания", code: "05", desc: "Мысли, заметки и статьи" },
-  { href: "/wall", aliases: ["/guestbook"], label: "~/забор", code: "06", desc: "Черкануть пару слов в чат" },
-  { href: "/tools", aliases: ["/utilities"], label: "~/верстак", code: "07", desc: "Микро-утилиты и конвертеры" },
-];
+import { playSound } from "@/lib/sound";
 
 export function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -46,20 +31,24 @@ export function Navigation() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
+              onClick={() => playSound("click")}
+              onMouseEnter={() => playSound("hover")}
               className="group flex items-center gap-2 font-mono text-sm tracking-tight"
             >
               <span className="aug-br px-2 py-0.5 bg-ctp-surface0 border border-[var(--border)] text-ctp-mauve group-hover:border-ctp-mauve transition-colors font-bold">
-                &gt;_ vokiry
+                &gt;_ {siteConfig.author.name}
               </span>
               <span className="text-ctp-overlay1 text-xs hidden sm:inline font-mono">
-                // v0.3.0
+                // {siteConfig.version}
               </span>
             </Link>
 
             {/* Twitch Status Pill */}
             <Link
               href="/live"
-              className={status.isLive ? "badge-live aug-br cursor-pointer" : "badge-offline aug-br hover:border-ctp-overlay0 transition-colors"}
+              onClick={() => playSound("click")}
+              onMouseEnter={() => playSound("hover")}
+              className={status.isLive ? "badge-live aug-br cursor-pointer animate-pulse-glow" : "badge-offline aug-br hover:border-ctp-overlay0 transition-colors"}
               title={status.isLive ? `В эфире: ${status.title}` : "Стрим оффлайн"}
             >
               {status.isLive ? (
@@ -83,12 +72,14 @@ export function Navigation() {
 
           {/* Center/Desktop: Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map((item) => {
+            {siteConfig.navigation.map((item) => {
               const active = isItemActive(item);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  onClick={() => playSound("click")}
+                  onMouseEnter={() => playSound("hover")}
                   className={`px-2.5 py-1 text-xs font-mono transition-all ${
                     active
                       ? "aug-br bg-ctp-surface0 border border-ctp-mauve/50 text-ctp-mauve font-semibold shadow-xs"
@@ -101,12 +92,16 @@ export function Navigation() {
             })}
           </nav>
 
-          {/* Right: Theme Toggle & Mobile Menu Button */}
+          {/* Right: Sound Toggle, Theme Toggle & Mobile Menu */}
           <div className="flex items-center gap-2">
+            <SoundToggle />
             <ThemeToggle />
 
             <button
-              onClick={() => setMobileOpen(!mobileOpen)}
+              onClick={() => {
+                playSound("click");
+                setMobileOpen(!mobileOpen);
+              }}
               className="lg:hidden aug-br p-1.5 border border-[var(--border)] bg-ctp-surface0 text-ctp-text hover:border-ctp-mauve transition-colors cursor-pointer"
               aria-label="Toggle navigation menu"
             >
@@ -138,13 +133,16 @@ export function Navigation() {
 
         {/* Drawer Links */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          {navItems.map((item) => {
+          {siteConfig.navigation.map((item) => {
             const active = isItemActive(item);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setMobileOpen(false)}
+                onClick={() => {
+                  playSound("click");
+                  setMobileOpen(false);
+                }}
                 className={`aug-br flex items-center justify-between p-2.5 text-xs font-mono transition-all ${
                   active
                     ? "bg-ctp-surface0 border border-ctp-mauve text-ctp-mauve font-semibold"
@@ -168,12 +166,12 @@ export function Navigation() {
           <div className="flex items-center justify-between mb-2">
             <span className="text-ctp-overlay1">Twitch:</span>
             <a
-              href="https://twitch.tv/vokiry"
+              href={siteConfig.twitch.channelUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-ctp-mauve hover:underline"
             >
-              twitch.tv/vokiry ↗
+              twitch.tv/{siteConfig.twitch.channel} ↗
             </a>
           </div>
           <div className="text-[11px] text-ctp-subtext0">

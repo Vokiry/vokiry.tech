@@ -1,14 +1,33 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { getProjects } from "@/lib/projects";
 import { getAllPosts } from "@/lib/posts";
 import { LiveStreamWidget } from "@/components/LiveStreamWidget";
-
-export const dynamic = "force-dynamic";
+import { LiveTelemetryBar } from "@/components/LiveTelemetryBar";
+import { siteConfig } from "@/lib/siteConfig";
+import { playSound } from "@/lib/sound";
+import projectsData from "@/content/projects.json";
 
 export default function Home() {
-  const projects = getProjects();
-  const featuredProjects = projects.filter((p) => p.featured || p.order <= 3).slice(0, 3);
-  const posts = getAllPosts().slice(0, 3);
+  const featuredProjects = projectsData.filter((p) => p.featured).slice(0, 3);
+  const posts = [
+    {
+      slug: "vibe-coding-manifesto",
+      title: "Манифест дурного вайбкодинга: когда софт пишется душой",
+      date: "2026-03-28",
+      excerpt: "Почему перфекционизм убивает пет-проекты, как писать код на чистом вайбе под две шаурмы и почему работающий костыль лучше идеальной нереализованной архитектуры.",
+      tags: ["vibe-coding", "мысли", "разработка"],
+    },
+    {
+      slug: "system24-stream-overlay",
+      title: "Как я переписал OBS оверлеи в стиле TUI (btop/system24)",
+      date: "2026-03-15",
+      excerpt: "Зачем делать обычные анимированные гифки и плашки со StreamElements, когда можно собрать терминальный HUD в стиле btop и lazygit с нулевым радиусом скруглений и локальным Python-бриджем.",
+      tags: ["obs", "stream", "tui", "system24"],
+    },
+  ];
 
   const sections = [
     {
@@ -16,9 +35,10 @@ export default function Home() {
       href: "/live",
       title: "~/подруб",
       subtitle: "Twitch стрим и статус",
-      desc: "Эфир на twitch.tv/vokiry, расписание, клипы, команды чата и донаты.",
+      desc: `Эфир на twitch.tv/${siteConfig.twitch.channel}, расписание, клипы, команды чата и донаты.`,
       accent: "text-ctp-red",
       border: "hover:border-ctp-red/50",
+      glow: "hover:shadow-[0_0_15px_rgba(243,139,168,0.15)]",
     },
     {
       code: "03",
@@ -28,6 +48,7 @@ export default function Home() {
       desc: "OBS-шаблоны, кастомные оверлеи, скрипты на коленке, телеграм-боты и опенсорс.",
       accent: "text-ctp-mauve",
       border: "hover:border-ctp-mauve/50",
+      glow: "hover:shadow-[0_0_15px_rgba(203,166,247,0.15)]",
     },
     {
       code: "04",
@@ -37,6 +58,7 @@ export default function Home() {
       desc: "Честный разбор рабочего ПК, мониторов, микрофона, камеры и софта.",
       accent: "text-ctp-teal",
       border: "hover:border-ctp-teal/50",
+      glow: "hover:shadow-[0_0_15px_rgba(148,226,213,0.15)]",
     },
     {
       code: "05",
@@ -46,6 +68,7 @@ export default function Home() {
       desc: "Статьи про разработку, грабли в Linux/Next.js, стриминг и автоматизацию.",
       accent: "text-ctp-peach",
       border: "hover:border-ctp-peach/50",
+      glow: "hover:shadow-[0_0_15px_rgba(250,179,135,0.15)]",
     },
     {
       code: "06",
@@ -55,6 +78,7 @@ export default function Home() {
       desc: "Оставить памятную надпись на стене станции через GitHub.",
       accent: "text-ctp-sapphire",
       border: "hover:border-ctp-sapphire/50",
+      glow: "hover:shadow-[0_0_15px_rgba(116,199,236,0.15)]",
     },
     {
       code: "07",
@@ -64,114 +88,153 @@ export default function Home() {
       desc: "Быстрый JSON, Base64, Cron, Color и хеширование без рекламы.",
       accent: "text-ctp-green",
       border: "hover:border-ctp-green/50",
+      glow: "hover:shadow-[0_0_15px_rgba(166,227,161,0.15)]",
     },
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+      {/* --------------------------------------------------------------------
+          LIVE TELEMETRY TICKER
+          -------------------------------------------------------------------- */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <LiveTelemetryBar />
+      </motion.div>
+
       {/* --------------------------------------------------------------------
           HERO — Station Header
           -------------------------------------------------------------------- */}
-      <section className="space-y-6">
+      <motion.section
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="space-y-6"
+      >
         <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-ctp-subtext0">
           <span className="tui-chip aug-br text-ctp-mauve">
-            [ STATION_ID: VOKIRY-01 ]
+            [ STATION_ID: {siteConfig.stationId} ]
           </span>
           <span className="text-ctp-overlay0">//</span>
           <span>MODE: VIBE_CODING</span>
           <span className="text-ctp-overlay0">//</span>
-          <span className="text-ctp-green">STATION: OPERATIONAL</span>
+          <span className="text-ctp-green font-semibold">● ONLINE</span>
         </div>
 
         <div className="space-y-3">
           <div className="flex flex-wrap items-baseline gap-3">
             <h1 className="text-5xl sm:text-7xl font-bold font-display tracking-tight text-ctp-text">
-              vokiry
+              {siteConfig.author.name}
             </h1>
             <span className="aug-br px-3 py-1 font-mono text-xs sm:text-sm bg-ctp-surface0 border border-ctp-mauve/40 text-ctp-mauve font-semibold">
-              дурной вайбкодер × медианищета
+              {siteConfig.author.role}
             </span>
           </div>
 
           <p className="text-base sm:text-lg text-ctp-subtext0 max-w-3xl leading-relaxed">
-            Пишу код на чистом вайбе, стримлю эксперименты на Twitch, собираю оверлеи и софт из костылей и энтузиазма. 
-            Здесь собраны мои поделки, сетап медианищеты, трансляции и заметки с полей.
+            {siteConfig.author.bio}
           </p>
         </div>
 
         {/* Quick action buttons */}
         <div className="flex flex-wrap items-center gap-3 pt-2">
           <a
-            href="https://twitch.tv/vokiry"
+            href={siteConfig.twitch.channelUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="aug-br inline-flex items-center gap-2 px-4 py-2 font-mono text-xs font-semibold bg-ctp-red text-white hover:opacity-90 transition-opacity cursor-pointer shadow-xs"
+            onClick={() => playSound("click")}
+            onMouseEnter={() => playSound("hover")}
+            className="aug-br inline-flex items-center gap-2 px-5 py-2.5 font-mono text-xs font-semibold bg-ctp-red text-white hover:opacity-90 transition-all cursor-pointer shadow-xs hover:shadow-[0_0_15px_rgba(243,139,168,0.4)]"
           >
             <span>▶ Twitch подруб</span>
           </a>
           <Link
             href="/crafts"
-            className="aug-br inline-flex items-center gap-1.5 px-4 py-2 font-mono text-xs font-semibold bg-ctp-surface0 border border-[var(--border)] text-ctp-text hover:border-ctp-mauve hover:text-ctp-mauve transition-all"
+            onClick={() => playSound("click")}
+            onMouseEnter={() => playSound("hover")}
+            className="aug-br inline-flex items-center gap-1.5 px-4 py-2.5 font-mono text-xs font-semibold bg-ctp-surface0 border border-[var(--border)] text-ctp-text hover:border-ctp-mauve hover:text-ctp-mauve transition-all"
           >
             <span>[~/костыли]</span>
           </Link>
           <Link
             href="/hardware"
-            className="aug-br inline-flex items-center gap-1.5 px-4 py-2 font-mono text-xs font-semibold bg-ctp-surface0 border border-[var(--border)] text-ctp-text hover:border-ctp-teal hover:text-ctp-teal transition-all"
+            onClick={() => playSound("click")}
+            onMouseEnter={() => playSound("hover")}
+            className="aug-br inline-flex items-center gap-1.5 px-4 py-2.5 font-mono text-xs font-semibold bg-ctp-surface0 border border-[var(--border)] text-ctp-text hover:border-ctp-teal hover:text-ctp-teal transition-all"
           >
             <span>[~/железки]</span>
           </Link>
           <Link
             href="/wall"
-            className="aug-br inline-flex items-center gap-1.5 px-4 py-2 font-mono text-xs font-semibold bg-ctp-surface0 border border-[var(--border)] text-ctp-text hover:border-ctp-peach hover:text-ctp-peach transition-all"
+            onClick={() => playSound("click")}
+            onMouseEnter={() => playSound("hover")}
+            className="aug-br inline-flex items-center gap-1.5 px-4 py-2.5 font-mono text-xs font-semibold bg-ctp-surface0 border border-[var(--border)] text-ctp-text hover:border-ctp-peach hover:text-ctp-peach transition-all"
           >
             <span>[~/забор]</span>
           </Link>
         </div>
-      </section>
+      </motion.section>
 
       {/* --------------------------------------------------------------------
           TWITCH BROADCAST FEED WIDGET
           -------------------------------------------------------------------- */}
-      <section>
+      <motion.section
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <LiveStreamWidget />
-      </section>
+      </motion.section>
 
       {/* --------------------------------------------------------------------
           STATION BENTO NAVIGATION GRID
           -------------------------------------------------------------------- */}
-      <section className="space-y-4">
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="space-y-4"
+      >
         <div className="flex items-center justify-between pb-2 border-b border-[var(--border-subtle)] font-mono text-xs">
           <span className="text-ctp-subtext0">// КАРТА СТАНЦИИ</span>
           <span className="text-ctp-overlay0">INDEX [02..07]</span>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sections.map((sec) => (
-            <Link
+          {sections.map((sec, idx) => (
+            <motion.div
               key={sec.code}
-              href={sec.href}
-              className={`panel-card aug-br p-5 block group ${sec.border} transition-all`}
+              whileHover={{ y: -4, transition: { duration: 0.15 } }}
             >
-              <div className="flex items-center justify-between mb-3 text-xs font-mono">
-                <span className="text-ctp-overlay0">[{sec.code}]</span>
-                <span className={`${sec.accent} font-semibold group-hover:translate-x-1 transition-transform inline-block`}>
-                  открыть ↗
-                </span>
-              </div>
-              <h2 className="text-lg font-bold font-display text-ctp-text group-hover:text-ctp-mauve transition-colors mb-1">
-                {sec.title}
-              </h2>
-              <div className="text-xs font-mono text-ctp-subtext0 mb-2">
-                {sec.subtitle}
-              </div>
-              <p className="text-xs text-ctp-overlay1 leading-relaxed">
-                {sec.desc}
-              </p>
-            </Link>
+              <Link
+                href={sec.href}
+                onClick={() => playSound("click")}
+                onMouseEnter={() => playSound("hover")}
+                className={`panel-card aug-br p-5 block group h-full ${sec.border} ${sec.glow} transition-all`}
+              >
+                <div className="flex items-center justify-between mb-3 text-xs font-mono">
+                  <span className="text-ctp-overlay0">[{sec.code}]</span>
+                  <span className={`${sec.accent} font-semibold group-hover:translate-x-1 transition-transform inline-block`}>
+                    открыть ↗
+                  </span>
+                </div>
+                <h2 className="text-lg font-bold font-display text-ctp-text group-hover:text-ctp-mauve transition-colors mb-1">
+                  {sec.title}
+                </h2>
+                <div className="text-xs font-mono text-ctp-subtext0 mb-2">
+                  {sec.subtitle}
+                </div>
+                <p className="text-xs text-ctp-overlay1 leading-relaxed">
+                  {sec.desc}
+                </p>
+              </Link>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* --------------------------------------------------------------------
           FEATURED CRAFTS (ПОДЕЛКИ И КОСТЫЛИ)
@@ -186,6 +249,8 @@ export default function Home() {
           </div>
           <Link
             href="/crafts"
+            onClick={() => playSound("click")}
+            onMouseEnter={() => playSound("hover")}
             className="text-xs font-mono text-ctp-mauve hover:underline"
           >
             все костыли →
@@ -194,9 +259,10 @@ export default function Home() {
 
         <div className="grid md:grid-cols-3 gap-4">
           {featuredProjects.map((p, i) => (
-            <div
+            <motion.div
               key={p.slug || i}
-              className="panel-card aug-br p-5 flex flex-col justify-between"
+              whileHover={{ y: -3, transition: { duration: 0.15 } }}
+              className="panel-card aug-br p-5 flex flex-col justify-between hover:border-ctp-mauve/50 transition-all"
             >
               <div>
                 <div className="flex items-center justify-between text-xs font-mono text-ctp-overlay0 mb-2">
@@ -229,24 +295,26 @@ export default function Home() {
                       href={p.github}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => playSound("click")}
+                      onMouseEnter={() => playSound("hover")}
                       className="text-ctp-mauve hover:underline"
                     >
                       GitHub ↗
                     </a>
                   )}
                   {p.live && p.live !== "#" && (
-                    <a
+                    <Link
                       href={p.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      onClick={() => playSound("click")}
+                      onMouseEnter={() => playSound("hover")}
                       className="text-ctp-teal hover:underline"
                     >
                       Демо ↗
-                    </a>
+                    </Link>
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
@@ -264,29 +332,31 @@ export default function Home() {
           </div>
           <Link
             href="/notes"
+            onClick={() => playSound("click")}
+            onMouseEnter={() => playSound("hover")}
             className="text-xs font-mono text-ctp-peach hover:underline"
           >
             все заметки →
           </Link>
         </div>
 
-        {posts.length === 0 ? (
-          <div className="panel-sharp aug-br p-6 font-mono text-xs text-ctp-overlay1">
-            <span>$ ls notes/ — пока пусто. Автор занят стримом или кодит костыли.</span>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {posts.map((post) => (
+        <div className="space-y-2">
+          {posts.map((post) => (
+            <motion.div
+              key={post.slug}
+              whileHover={{ x: 4, transition: { duration: 0.15 } }}
+            >
               <Link
-                key={post.slug}
                 href={`/notes/${post.slug}`}
-                className="panel-sharp aug-br p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group block"
+                onClick={() => playSound("click")}
+                onMouseEnter={() => playSound("hover")}
+                className="panel-sharp aug-br p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group block hover:border-ctp-peach/60 transition-colors"
               >
                 <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
                   <span className="font-mono text-xs text-ctp-overlay0 tabular-nums">
-                    {post.date}
+                    [{post.date}]
                   </span>
-                  <span className="text-base font-semibold text-ctp-text group-hover:text-ctp-mauve transition-colors">
+                  <span className="text-base font-semibold text-ctp-text group-hover:text-ctp-peach transition-colors">
                     {post.title}
                   </span>
                 </div>
@@ -301,9 +371,9 @@ export default function Home() {
                   ))}
                 </div>
               </Link>
-            ))}
-          </div>
-        )}
+            </motion.div>
+          ))}
+        </div>
       </section>
     </div>
   );

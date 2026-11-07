@@ -1,17 +1,10 @@
 "use client";
 
 import { useTwitch } from "@/lib/useTwitch";
+import { siteConfig } from "@/lib/siteConfig";
+import { playSound } from "@/lib/sound";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-const CHAT_COMMANDS = [
-  { cmd: "!git", desc: "Ссылка на GitHub со всеми открытыми костылями" },
-  { cmd: "!setup", desc: "Сетап медианищеты и рабочее железо" },
-  { cmd: "!tg", desc: "Телеграм-канал с анонсами и щитпостингом" },
-  { cmd: "!костыли", desc: "Текущий проект, над которым сейчас потеем" },
-  { cmd: "!музыка", desc: "Плейлист со стрима или текущий трек" },
-  { cmd: "!дроп", desc: "Узнать, когда следующий запланированный подруб" },
-];
 
 export default function LivePage() {
   const { status, loading } = useTwitch();
@@ -32,7 +25,7 @@ export default function LivePage() {
         <div className="flex items-center gap-3 font-mono text-xs text-ctp-subtext0">
           <span className="tui-chip aug-br text-ctp-red">[ 02 // ПОДРУБ ]</span>
           <span className="text-ctp-overlay0">//</span>
-          <span>TWITCH BROADCAST HUB</span>
+          <span>TWITCH BROADCAST HUB // {status.channel.toUpperCase()}</span>
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
@@ -40,7 +33,7 @@ export default function LivePage() {
             <h1 className="text-4xl sm:text-6xl font-bold font-display tracking-tight text-ctp-text">
               ~/подруб
             </h1>
-            <p className="text-base text-ctp-subtext0 mt-2 max-w-2xl">
+            <p className="text-base text-ctp-subtext0 mt-2 max-w-2xl leading-relaxed">
               Прямые трансляции на Twitch: кодинг на чистом вайбе, эксперименты с OBS и TUI, 
               починка упавших серверов и душевные разговоры за жизнь.
             </p>
@@ -53,7 +46,7 @@ export default function LivePage() {
                 <span>ОПРОС СЕРВЕРА...</span>
               </span>
             ) : status.isLive ? (
-              <span className="badge-live aug-br">
+              <span className="badge-live aug-br animate-pulse-glow">
                 <span className="live-dot" />
                 <span>В ЭФИРЕ ({status.viewerCount})</span>
               </span>
@@ -88,7 +81,7 @@ export default function LivePage() {
                   [ ○ OFFLINE ]
                 </div>
                 <h2 className="text-2xl font-bold font-display text-ctp-text">
-                  Канал twitch.tv/{status.channel} сейчас отдыхает
+                  Канал {siteConfig.twitch.channelUrl.replace("https://", "")} сейчас отдыхает
                 </h2>
                 <p className="text-xs sm:text-sm text-ctp-subtext0">
                   Стрим выключен. Но трансляции случаются часто! Подписывайся на канал и Telegram, 
@@ -99,14 +92,18 @@ export default function LivePage() {
                     href={status.channelUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => playSound("click")}
+                    onMouseEnter={() => playSound("hover")}
                     className="aug-br px-5 py-2.5 font-mono text-xs font-semibold bg-ctp-red text-white hover:opacity-90 transition-opacity"
                   >
                     Перейти на Twitch канал ↗
                   </a>
                   <a
-                    href="https://t.me/Vokiry"
+                    href={siteConfig.socials.telegram}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => playSound("click")}
+                    onMouseEnter={() => playSound("hover")}
                     className="aug-br px-4 py-2.5 font-mono text-xs font-semibold border border-[var(--border)] bg-ctp-surface0 text-ctp-sapphire hover:border-ctp-sapphire transition-colors"
                   >
                     Telegram с анонсами ↗
@@ -142,7 +139,7 @@ export default function LivePage() {
           </div>
 
           <div className="space-y-2.5 font-mono text-xs">
-            {CHAT_COMMANDS.map((item) => (
+            {siteConfig.chatCommands.map((item) => (
               <div
                 key={item.cmd}
                 className="flex flex-col sm:flex-row sm:items-center justify-between p-2 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] gap-1.5"
@@ -184,15 +181,19 @@ export default function LivePage() {
             </div>
             <div className="flex flex-wrap gap-2">
               <a
-                href="https://www.donationalerts.com/r/vokiry"
+                href={siteConfig.socials.donate}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => playSound("click")}
+                onMouseEnter={() => playSound("hover")}
                 className="aug-br px-3 py-1.5 text-xs font-mono bg-ctp-peach/10 border border-ctp-peach/40 text-ctp-peach hover:bg-ctp-peach/20 transition-colors"
               >
                 DonationAlerts ↗
               </a>
               <Link
                 href="/hardware"
+                onClick={() => playSound("click")}
+                onMouseEnter={() => playSound("hover")}
                 className="aug-br px-3 py-1.5 text-xs font-mono border border-[var(--border)] text-ctp-subtext0 hover:border-ctp-teal hover:text-ctp-teal transition-colors"
               >
                 Глянуть сетап медианищеты →

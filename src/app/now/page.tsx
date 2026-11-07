@@ -1,51 +1,69 @@
 import Link from "next/link";
-import { getProfile } from "@/lib/profile";
-import { TerminalWindow } from "@/components/TerminalWindow";
+import { getNowItems } from "@/lib/profile";
 
 export const dynamic = "force-dynamic";
 
 export default function NowPage() {
-  const profile = getProfile();
-  const nowItems = profile?.now || [];
+  const nowItems = getNowItems();
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-bold mb-8 gradient-text">~/now</h1>
-      
-      <div className="mb-8 animate-scale-in">
-        <TerminalWindow title="~ now">
-          <pre className="text-xs sm:text-sm font-mono text-[var(--text-primary)]">
-<span className="text-[var(--section-accent)]">$</span> cat now.txt
-<span className="text-[var(--text-muted)]"># What I'm currently focused on</span></pre>
-        </TerminalWindow>
-      </div>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      {/* --------------------------------------------------------------------
+          Header
+          -------------------------------------------------------------------- */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-3 font-mono text-xs text-ctp-subtext0">
+          <span className="tui-chip aug-br text-ctp-teal">[ NOW // СЕЙЧАС ]</span>
+          <span className="text-ctp-overlay0">//</span>
+          <span>CURRENT FOCUS &amp; ACTIVITIES</span>
+        </div>
 
-      <div className="space-y-4 stagger-2">
+        <div>
+          <h1 className="text-4xl sm:text-6xl font-bold font-display tracking-tight text-ctp-text">
+            ~/сейчас
+          </h1>
+          <p className="text-base text-ctp-subtext0 mt-2 max-w-xl">
+            Страница в духе концепции /now Дерека Сиверса. Чем заняты руки и голова прямо в эти дни.
+          </p>
+        </div>
+      </section>
+
+      {/* --------------------------------------------------------------------
+          Now items
+          -------------------------------------------------------------------- */}
+      <div className="space-y-4">
         {nowItems.length === 0 ? (
-          <TerminalWindow variant="minimal" className="animate-fade-in">
-            <p className="text-[var(--text-secondary)]">
-              Nothing here yet. Add your current focus in the admin dashboard!
-            </p>
-          </TerminalWindow>
+          <div className="panel-sharp aug-br p-6 text-center font-mono text-xs text-ctp-subtext0">
+            [ Текущий фокус пока пуст. Автор кодит костыли на стриме. ]
+          </div>
         ) : (
           nowItems.map((item, idx) => (
-            <div key={idx} className="terminal-card p-6 animate-slide-up" style={{ animationDelay: `${(idx + 1) * 0.1}s` }}>
-              <h3 className="text-lg font-semibold mb-2">{item.item}</h3>
-              <p className="text-[var(--text-secondary)]">{item.description}</p>
+            <div
+              key={idx}
+              className="panel-card aug-br p-6 space-y-2 hover:border-ctp-teal/50 transition-all"
+            >
+              <div className="flex items-center gap-2 font-mono text-xs text-ctp-teal">
+                <span>[0{idx + 1}]</span>
+                <span className="font-bold text-ctp-text text-base">{item.item}</span>
+              </div>
+              <p className="text-xs sm:text-sm text-ctp-subtext0 leading-relaxed font-mono pl-6">
+                {item.description}
+              </p>
             </div>
           ))
         )}
       </div>
 
-      <div className="mt-12 flex gap-6 animate-fade-in">
-        <Link href="/about" className="text-[var(--text-muted)] hover:text-[var(--section-accent)] transition-colors">
-          ~/about
+      {/* Footer links */}
+      <div className="pt-4 flex flex-wrap gap-4 font-mono text-xs">
+        <Link href="/hardware" className="text-ctp-teal hover:underline">
+          → Железки сетапа (~/железки)
         </Link>
-        <Link href="/uses" className="text-[var(--text-muted)] hover:text-[var(--section-accent)] transition-colors">
-          ~/uses
+        <Link href="/live" className="text-ctp-red hover:underline">
+          → Проверить подруб (~/подруб)
         </Link>
-        <Link href="/tails" className="text-[var(--text-muted)] hover:text-[var(--section-accent)] transition-colors">
-          ~/tails
+        <Link href="/tails" className="text-ctp-mauve hover:underline">
+          → Easter egg (~/tails)
         </Link>
       </div>
     </div>

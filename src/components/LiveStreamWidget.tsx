@@ -1,13 +1,15 @@
 "use client";
 
 import { useTwitch } from "@/lib/useTwitch";
+import { siteConfig } from "@/lib/siteConfig";
+import { playSound } from "@/lib/sound";
 import Link from "next/link";
 
 export function LiveStreamWidget() {
   const { status, loading } = useTwitch();
 
   return (
-    <div className="panel-sharp aug-br p-5 sm:p-6 relative overflow-hidden bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)]">
+    <div className="panel-sharp aug-br p-5 sm:p-6 relative overflow-hidden bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)] border border-[var(--border)]">
       {/* Decorative top-right stripes */}
       <div className="absolute top-0 right-0 w-32 h-16 stripe-bg opacity-40 pointer-events-none" />
 
@@ -29,7 +31,7 @@ export function LiveStreamWidget() {
               <span>ОПРОС СЕРВЕРА...</span>
             </span>
           ) : status.isLive ? (
-            <span className="badge-live aug-br text-xs">
+            <span className="badge-live aug-br text-xs animate-pulse-glow">
               <span className="live-dot" />
               <span>LIVE: В ЭФИРЕ</span>
               {status.viewerCount > 0 && <span>({status.viewerCount})</span>}
@@ -72,13 +74,17 @@ export function LiveStreamWidget() {
             href={status.channelUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="aug-br inline-flex items-center gap-2 px-4 py-2 text-xs font-mono font-semibold bg-ctp-mauve text-ctp-base hover:opacity-90 transition-opacity cursor-pointer"
+            onClick={() => playSound("click")}
+            onMouseEnter={() => playSound("hover")}
+            className="aug-br inline-flex items-center gap-2 px-4 py-2 text-xs font-mono font-semibold bg-ctp-mauve text-ctp-base hover:opacity-90 transition-opacity cursor-pointer shadow-xs hover:shadow-[0_0_12px_rgba(203,166,247,0.35)]"
           >
             {status.isLive ? "▶ Смотреть на Twitch" : "↗ Открыть канал на Twitch"}
           </a>
 
           <Link
             href="/live"
+            onClick={() => playSound("click")}
+            onMouseEnter={() => playSound("hover")}
             className="aug-br inline-flex items-center gap-1.5 px-3 py-2 text-xs font-mono border border-[var(--border)] text-ctp-text hover:border-ctp-mauve hover:text-ctp-mauve transition-colors"
           >
             [ детали подруба &amp; команды ]

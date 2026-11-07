@@ -272,29 +272,36 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold gradient-text">Admin Dashboard</h1>
-        <button onClick={handleLogout} className="text-sm text-[var(--text-muted)] hover:text-[var(--primary)]">Logout</button>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <div className="flex items-center justify-between pb-4 border-b border-[var(--border)] font-mono text-xs">
+        <div className="flex items-center gap-2">
+          <span className="text-ctp-peach font-bold">&gt;_ STATION_ADMIN</span>
+          <span className="text-ctp-overlay0">// DASHBOARD</span>
+        </div>
+        <button onClick={handleLogout} className="text-xs text-ctp-red hover:underline cursor-pointer">
+          [ Выйти из системы ]
+        </button>
       </div>
 
-      <nav className="flex gap-4 mb-4 text-sm">
-        <Link href="/" className="text-[var(--primary)] hover:underline">← Back to site</Link>
+      <nav className="flex gap-4 font-mono text-xs">
+        <Link href="/" className="text-ctp-mauve hover:underline">← Вернуться на базу</Link>
       </nav>
 
       {message && (
-        <div className={`mb-4 p-3 rounded ${message.includes("!") ? "bg-green-900" : "bg-red-900"}`}>{message}</div>
+        <div className={`p-3 font-mono text-xs aug-br ${message.includes("!") ? "bg-ctp-green/20 text-ctp-green border border-ctp-green/40" : "bg-ctp-red/20 text-ctp-red border border-ctp-red/40"}`}>
+          {message}
+        </div>
       )}
 
-      <div className="flex gap-2 mb-6 border-b border-[var(--border)]">
+      <div className="flex flex-wrap gap-2 border-b border-[var(--border)] font-mono text-xs pb-1">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 text-sm border-b-2 transition-colors ${
+            className={`px-3 py-1.5 aug-br transition-all cursor-pointer ${
               activeTab === tab.id
-                ? "border-[var(--primary)] text-[var(--primary)]"
-                : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+                ? "bg-ctp-surface1 border border-ctp-mauve text-ctp-mauve font-semibold"
+                : "border border-transparent text-ctp-subtext0 hover:text-ctp-text hover:bg-ctp-surface0"
             }`}
           >
             {tab.label}
@@ -303,11 +310,14 @@ export default function AdminDashboard() {
       </div>
 
       {activeTab === "posts" && (
-        <div className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold">Blog Posts</h2>
-            <button onClick={() => { setShowPostForm(!showPostForm); if (!showPostForm) setPostForm({ title: "", excerpt: "", tags: "", content: "" }); }} className="px-4 py-2 rounded bg-[var(--primary)] text-[var(--bg-primary)] text-sm">
-              {showPostForm ? "Cancel" : "New Post"}
+        <div className="panel-card aug-br p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)] font-mono text-xs">
+            <h2 className="text-base font-bold font-display text-ctp-text">Статьи блога (MDX)</h2>
+            <button
+              onClick={() => { setShowPostForm(!showPostForm); if (!showPostForm) setPostForm({ title: "", excerpt: "", tags: "", content: "" }); }}
+              className="px-3 py-1 aug-br bg-ctp-mauve text-ctp-base font-mono text-xs font-semibold cursor-pointer hover:opacity-90 transition-opacity"
+            >
+              {showPostForm ? "Отмена" : "+ Новая статья"}
             </button>
           </div>
 
@@ -350,7 +360,7 @@ export default function AdminDashboard() {
                     <p className="text-sm text-[var(--text-muted)]">{post.date}</p>
                   </div>
                   <div className="flex gap-2">
-                    <Link href={`/blog/${post.slug}`} className="text-sm text-[var(--primary)] hover:underline">View</Link>
+                    <Link href={`/notes/${post.slug}`} className="text-sm text-ctp-mauve hover:underline font-mono">View ↗</Link>
                     <button onClick={() => handleDeletePost(post.slug)} className="text-sm text-red-500 hover:underline">Delete</button>
                   </div>
                 </div>

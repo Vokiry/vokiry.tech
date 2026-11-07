@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAllPosts } from "@/lib/posts";
-
-const siteUrl = "https://vokiry.tech";
+import { siteConfig } from "@/lib/siteConfig";
 
 const staticPages = [
   { path: "/", priority: "1.0", changefreq: "daily" },
@@ -29,7 +28,7 @@ export async function GET() {
 ${allPages
   .map(
     (page) => `  <url>
-    <loc>${siteUrl}${page.path}</loc>
+    <loc>${siteConfig.siteUrl}${page.path}</loc>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>`
